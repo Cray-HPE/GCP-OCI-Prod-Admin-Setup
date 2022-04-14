@@ -42,16 +42,15 @@ variable "region" {
   type        = string
 }
 
-// TODO
-# variable "github_repo" {
-#   description = "Github repo for running Github Actions from."
-#   type        = string
-#   default     = "sigstore/public-good-instance"
-# }
+variable "github_repo" {
+  description = "Github repo for running Github Actions from."
+  type        = string
+  default     = "Cray-HPE/GCP-OCI-Prod-Admin-Setup"
+}
 
 variable "tunnel_accessor_sa" {
   type        = string
   description = "Email of group to give access to the tunnel to"
   // TODO
-  default = "user:priya@chainguard.dev"
+  default = "user:pwadhwa@algol60.net"
 }
