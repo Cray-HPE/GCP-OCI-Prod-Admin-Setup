@@ -65,12 +65,12 @@ output "cluster_endpoint" {
 output "cluster_ca_certificate" {
   sensitive   = true
   description = "Cluster ca certificate (base64 encoded)"
-  value = module.cluster.cluster_ca_certificate
+  value       = module.cluster.cluster_ca_certificate
 }
 
 output "get_credentials" {
   description = "Gcloud get-credentials command"
-  value = module.cluster.get_credentials
+  value       = module.cluster.get_credentials
 }
 
 output "gke_sa_email" {

@@ -53,5 +53,5 @@ variable "tunnel_accessor_sa" {
   type        = string
   description = "Email of group to give access to the tunnel to"
   // TODO
-  default     = "user:priya@chainguard.dev"
+  default = "user:priya@chainguard.dev"
 }
