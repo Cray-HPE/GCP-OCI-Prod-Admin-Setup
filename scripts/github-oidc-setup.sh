@@ -198,3 +198,10 @@ gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
   --project="${PROJECT_ID}" \
   --role="roles/iam.serviceAccountKeyAdmin" \
   --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating secrets in secretmanager.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/secretmanager.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"

@@ -48,9 +48,11 @@ variable "github_repo" {
   default     = "Cray-HPE/GCP-OCI-Prod-Admin-Setup"
 }
 
+// We don't actually need this but it's required by the bastion module
+// So just assign it to the github-actions SA, which already has the permissions that will be granted
+// in the bastion module
 variable "tunnel_accessor_sa" {
   type        = string
   description = "Email of group to give access to the tunnel to"
-  // TODO
-  default = "user:pwadhwa@algol60.net"
+  default     = "serviceAccount:github-actions@oci-signer-service-dev.iam.gserviceaccount.com"
 }
