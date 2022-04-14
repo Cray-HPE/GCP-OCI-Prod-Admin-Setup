@@ -1,0 +1,33 @@
+name: Terraform Checks
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+    - 'terraform/**'
+  push:
+    branches:
+      - main
+    paths:
+    - 'terraform/**'
+
+permissions:
+  contents: read      
+
+jobs:
+  terraform-fmt:
+    name: 'Terraform fmt'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2.4.0
+
+      - uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec # v1.3.2
+        with:
+          # TODO: extract terraform from the tf file when we have pinned
+          terraform_version: 1.1.6
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check -recursive .
