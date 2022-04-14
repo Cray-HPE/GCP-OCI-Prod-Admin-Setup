@@ -10,7 +10,6 @@
 **/.terraform.lock.hcl
 **/.terraform
 **/terraform.tfvars
-**/remote-state.tf
 **/.terraform/**
 **/*.tfstate.backup
 **/*.tfstate
