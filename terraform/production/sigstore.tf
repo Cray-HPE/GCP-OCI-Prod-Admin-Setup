@@ -46,3 +46,42 @@ module "cluster" {
     module.bastion
   ]
 }
+
+// MYSQL is used as the database for Trillian to store entries in
+module "mysql" {
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/mysql"
+
+  region     = var.region
+  project_id = var.project_id
+
+  cluster_name = var.cluster_name
+
+  network = module.network.network_self_link
+
+  depends_on = [
+    module.network,
+    module.gke-cluster
+  ]
+}
+
+// Fulcio
+module "fulcio" {
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/fulcio"
+
+  region       = var.region
+  project_id   = var.project_id
+  cluster_name = var.cluster_name
+
+  // Don't enable GCP CA service since we're using a provided intermediate
+  enable_ca = false
+
+  // KMS
+  fulcio_keyring_name = "fulcio-keyring"
+  fulcio_key_name     = "fulcio-intermediate-key"
+
+  depends_on = [
+    module.gke-cluster,
+    module.network
+  ]
+}
+
