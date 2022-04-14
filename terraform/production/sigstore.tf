@@ -88,7 +88,7 @@ module "fulcio" {
   cluster_name = var.cluster_name
 
   // Don't enable GCP CA service since we're using a provided intermediate
-  enable_ca = false
+  enable_ca    = false
   ca_pool_name = "sigstore-ca"
 
   // KMS

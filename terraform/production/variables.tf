@@ -52,5 +52,5 @@ variable "tunnel_accessor_sa" {
   type        = string
   description = "Email of group to give access to the tunnel to"
   // TODO
-  default     = "user:pwadhwa@algol60.net"
+  default = "user:pwadhwa@algol60.net"
 }
