@@ -115,13 +115,6 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: connect to bastion
-      if: ${{ env.BASTION_ACCESS == 'true' }}
-      run: |
-        gcloud compute ssh --zone ${{ env.BASTION_ZONE }} ${{ env.BASTION_NAME}} --tunnel-through-iap --project ${{ env.PROJECT_ID }} -- -N -D 8118 &
-        echo "HTTPS_PROXY=socks5://localhost:8118" >> $GITHUB_ENV
-        sleep 30
-
     - name: Terraform validate
       id: validate
       run: |
@@ -129,6 +122,13 @@ jobs:
         terraform init
         terraform validate
         popd
+
+    - name: connect to bastion
+      if: ${{ env.BASTION_ACCESS == 'true' }}
+      run: |
+        gcloud compute ssh --zone ${{ env.BASTION_ZONE }} ${{ env.BASTION_NAME}} --tunnel-through-iap --project ${{ env.PROJECT_ID }} -- -N -D 8118 &
+        echo "HTTPS_PROXY=socks5://localhost:8118" >> $GITHUB_ENV
+        sleep 30
 
     - name: terraform plan
       run: |
