@@ -12,7 +12,7 @@ set -o pipefail
 set -o verbose
 set -o xtrace
 
-PROJECT_ID="OCI-Signer-Service-Dev"
+PROJECT_ID="oci-signer-service-dev"
 POOL_NAME="github-actions-pool"
 PROVIDER_NAME="github-actions-provider"
 LOCATION="global"
