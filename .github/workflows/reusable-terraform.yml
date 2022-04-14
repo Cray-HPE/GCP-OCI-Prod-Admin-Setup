@@ -126,7 +126,7 @@ jobs:
     - name: gcloud auth debug
       run: |
         gcloud auth list
-        gcloud alpha storage ls
+        gcloud alpha storage ls --quiet
 
     - name: terraform plan
       run: |
