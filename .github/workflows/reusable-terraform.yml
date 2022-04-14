@@ -133,7 +133,6 @@ jobs:
     - name: terraform plan
       run: |
         pushd ${{ env.TF_DIR }}
-        terraform init
         terraform plan
         popd
 
@@ -141,7 +140,6 @@ jobs:
       if: ${{ env.TF_MODE == 'apply' }}
       run: |
         pushd ${{ env.TF_DIR }}
-        terraform init
         terraform apply -auto-approve
         popd
 
