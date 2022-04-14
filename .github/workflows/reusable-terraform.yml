@@ -122,6 +122,12 @@ jobs:
         echo "HTTPS_PROXY=socks5://localhost:8118" >> $GITHUB_ENV
         sleep 30
 
+
+    - name: gcloud auth debug
+      run: |
+        gcloud auth list
+        gcloud alpha storage ls
+
     - name: terraform plan
       run: |
         pushd ${{ env.TF_DIR }}
