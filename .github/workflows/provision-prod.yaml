@@ -48,6 +48,7 @@ jobs:
       workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/1-infrastructure
+      output_bastion_info: true
 
   post-installation-tf:
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
