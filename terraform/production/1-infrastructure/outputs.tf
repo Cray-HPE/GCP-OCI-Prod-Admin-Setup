@@ -23,15 +23,15 @@ output "ssh_cmd" {
   value       = "gcloud compute ssh --zone ${module.bastion.zone} ${module.bastion.name} --tunnel-through-iap --project ${module.bastion.project}"
 }
 
-output "name" {
+output "bastion_name" {
   value = module.bastion.name
 }
 
-output "zone" {
+output "bastion_zone" {
   value = module.bastion.zone
 }
 
-output "project" {
+output "bastion_project" {
   value = module.bastion.project
 }
 
