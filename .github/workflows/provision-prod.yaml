@@ -1,0 +1,27 @@
+name: Provision Production Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_mode:
+        required: false
+        type: choice
+        options:
+          - 'plan'
+          - 'apply'
+        default: 'plan'
+        description: 'Mode to run terraform in.'
+
+
+jobs:
+  infrastructure:
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      terraform_mode: ${{ github.event.inputs.terraform_mode }}
+      project_id: oci-signer-service-dev
+      workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+      service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
+      terraform_dir: terraform/production
