@@ -43,6 +43,8 @@ LOCATION="global"
 REPO="Cray-HPE/GCP-OCI-Prod-Admin-Setup"
 SERVICE_ACCOUNT_ID="github-actions"
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT_ID}@${PROJECT_ID}.iam.gserviceaccount.com"
+PROJECT_NUMBER=$(gcloud projects describe "${PROJECT_ID}" --format='value(projectNumber)')
+
 
 if ! (gcloud iam workload-identity-pools describe "${POOL_NAME}" --location=${LOCATION}); then
   gcloud iam workload-identity-pools create "${POOL_NAME}" \
@@ -72,3 +74,132 @@ gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT}" \
   --project="${PROJECT_ID}" \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/237800849078/locations/${LOCATION}/workloadIdentityPools/${POOL_NAME}/attribute.repository/${REPO}"
+
+# # For service account impersonation, used for managing groups.
+# gcloud iam service-accounts add-iam-policy-binding "${DELEGATION_SERVICE_ACCOUNT}" \
+#   --project="${PROJECT_ID}" \
+#   --role="roles/iam.serviceAccountTokenCreator" \
+#   --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# # Adding binding is idempotent.
+# # Allows the the delegation service_account to use the projects billing acct
+# gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+#   --project="${PROJECT_ID}" \
+#   --role="roles/serviceusage.serviceUsageConsumer" \
+#   --member="serviceAccount:${DELEGATION_SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating Cloud SQL instance for Trillian
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/cloudsql.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating standalone Node Pool for GKE running as service accounts.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.serviceAccountUser" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating standalone Node Pool for GKE, and IAP tunnel for Bastion to GKE access.
+# This may be extreme, but I couldn't find a good narrowly scoped role with
+# compute.instanceGroupManagers.*
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/compute.instanceAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For ssh tunnel from Bastion to GKE access.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iap.tunnelResourceAccessor" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating GKE cluster.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/container.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating Service Accounts that maps to Kubernetes Service Accounts.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.serviceAccountAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For managing Service Account role membership.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/resourcemanager.projectIamAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For enabling service API.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/serviceusage.serviceUsageAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For writing Terraform state to GCS.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/storage.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating KMS ring and keys.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/cloudkms.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating private network for GKE/Cloud SQL.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/servicenetworking.networksAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For Monitoring Alerting Policies.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/monitoring.alertPolicyEditor" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+
+# Adding binding is idempotent.
+# For creating networks; compute.networks.create
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/compute.networkAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating networks; compute.firewalls.create
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/compute.securityAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+
+# Adding binding is idempotent.
+# For creating Workload identity pool.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.workloadIdentityPoolAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# Adding binding is idempotent.
+# For creating Workload identity pool.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.serviceAccountKeyAdmin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
