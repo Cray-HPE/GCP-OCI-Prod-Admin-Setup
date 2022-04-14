@@ -122,6 +122,14 @@ jobs:
         echo "HTTPS_PROXY=socks5://localhost:8118" >> $GITHUB_ENV
         sleep 30
 
+    - name: Terraform validate
+      id: validate
+      run: |
+        pushd ${{ env.TF_DIR }}
+        terraform init
+        terraform validate
+        popd
+
     - name: terraform plan
       run: |
         pushd ${{ env.TF_DIR }}
@@ -146,4 +154,6 @@ jobs:
         echo "::set-output name=bastion_name::$(terraform output -raw bastion_name)"
         echo "::set-output name=bastion_zone::$(terraform output -raw bastion_zone)"
         popd
+
+
 
