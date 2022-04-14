@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # MIT License
 #
@@ -22,6 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+#!/usr/bin/env bash
 
 # Commands based off of Google blog post
 # https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
