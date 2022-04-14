@@ -126,6 +126,7 @@ jobs:
     - name: gcloud auth debug
       run: |
         gcloud auth list
+        gcloud components install alpha
         gcloud alpha storage ls --quiet
 
     - name: terraform plan
