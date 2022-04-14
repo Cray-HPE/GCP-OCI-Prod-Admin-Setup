@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-project_id          = "oci-signer-service-dev"
-region              = "us-central1"
+project_id = "oci-signer-service-dev"
+region     = "us-central1"

@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Provision Production Environment
+name: Provision Production Environment Terraform
 
 on:
   workflow_dispatch:
@@ -37,7 +37,7 @@ on:
 
 
 jobs:
-  infrastructure:
+  infrastructure-tf:
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
     permissions:
       id-token: write
@@ -48,3 +48,18 @@ jobs:
       workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/1-infrastructure
+
+  post-installation-tf:
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      terraform_mode: ${{ github.event.inputs.terraform_mode }}
+      project_id: oci-signer-service-dev
+      workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+      service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
+      terraform_dir: terraform/production/2-post-installation
+      bastion_access: 'true'
+      bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
+      bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
