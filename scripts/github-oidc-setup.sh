@@ -70,23 +70,19 @@ gcloud iam service-accounts create ${SERVICE_ACCOUNT_ID} \
 fi
 
 # Adding binding is idempotent.
+# For Workload Identity
 gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT}" \
   --project="${PROJECT_ID}" \
   --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/237800849078/locations/${LOCATION}/workloadIdentityPools/${POOL_NAME}/attribute.repository/${REPO}"
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/${LOCATION}/workloadIdentityPools/${POOL_NAME}/attribute.repository/${REPO}"
 
-# # For service account impersonation, used for managing groups.
-# gcloud iam service-accounts add-iam-policy-binding "${DELEGATION_SERVICE_ACCOUNT}" \
-#   --project="${PROJECT_ID}" \
-#   --role="roles/iam.serviceAccountTokenCreator" \
-#   --member="serviceAccount:${SERVICE_ACCOUNT}"
 
-# # Adding binding is idempotent.
-# # Allows the the delegation service_account to use the projects billing acct
-# gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
-#   --project="${PROJECT_ID}" \
-#   --role="roles/serviceusage.serviceUsageConsumer" \
-#   --member="serviceAccount:${DELEGATION_SERVICE_ACCOUNT}"
+# For service account impersonation, used for managing groups.
+gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.serviceAccountTokenCreator" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+
 
 # Adding binding is idempotent.
 # For creating Cloud SQL instance for Trillian
@@ -173,7 +169,6 @@ gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
   --project="${PROJECT_ID}" \
   --role="roles/monitoring.alertPolicyEditor" \
   --member="serviceAccount:${SERVICE_ACCOUNT}"
-
 
 # Adding binding is idempotent.
 # For creating networks; compute.networks.create
