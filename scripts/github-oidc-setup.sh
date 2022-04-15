@@ -35,12 +35,12 @@ set -o pipefail
 set -o verbose
 set -o xtrace
 
-PROJECT_ID="oci-signer-service-dev"
+PROJECT_ID="${PROJECT_ID:-oci-signer-service-dev}"
 POOL_NAME="github-actions-pool"
 PROVIDER_NAME="github-actions-provider"
 LOCATION="global"
 
-REPO="Cray-HPE/GCP-OCI-Prod-Admin-Setup"
+REPO="${REPO:-"Cray-HPE/GCP-OCI-Prod-Admin-Setup"}"
 SERVICE_ACCOUNT_ID="github-actions"
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT_ID}@${PROJECT_ID}.iam.gserviceaccount.com"
 PROJECT_NUMBER=$(gcloud projects describe "${PROJECT_ID}" --format='value(projectNumber)')
