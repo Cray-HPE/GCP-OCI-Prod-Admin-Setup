@@ -54,7 +54,7 @@ jobs:
       project_id: oci-signer-service-dev
       workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
-      terraform_dir: terraform/signer/production/1-infrastructure
+      terraform_dir: terraform/production/signer/1-infrastructure
       output_bastion_info: 'true'
 
   post-installation-tf:
@@ -69,7 +69,7 @@ jobs:
       project_id: oci-signer-service-dev
       workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
-      terraform_dir: terraform/signer/production/2-post-installation
+      terraform_dir: terraform/production/signer/2-post-installation
       bastion_access: 'true'
       bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
       bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
