@@ -45,7 +45,7 @@ on:
 
 jobs:
   infrastructure-tf:
-    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/tekton-terraform.yml@main
     permissions:
       id-token: write
       contents: read
@@ -58,7 +58,7 @@ jobs:
       output_bastion_info: 'true'
 
   post-installation-tf:
-      uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
+      uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/tekton-terraform.yml@main
       needs: infrastructure-tf
       permissions:
         id-token: write
