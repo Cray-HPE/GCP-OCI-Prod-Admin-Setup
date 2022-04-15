@@ -14,5 +14,5 @@ resource "helm_release" "prometheus" {
 
 variable "PROM_HELM_CHART_VERSION" {
   description = "Version of the Prom helm chart"
-  default = "15.8.1"
+  default     = "15.8.1"
 }
