@@ -24,8 +24,3 @@ variable "github_repo" {
   default     = "Cray-HPE/GCP-OCI-Prod-Admin-Setup"
 }
 
-variable "external_secrets_chart_version" {
-  description = "Version of External-Secrets Helm chart. Versions listed here https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets"
-  type        = string
-  default     = "0.4.4"
-}
