@@ -47,7 +47,7 @@ resource "helm_release" "tekton_chains" {
   }
   set {
     name  = "tenantconfig.signers\\.x509\\.fulcio\\.address" # Connect chains to fulcio service
-    value = "http://fulcio.fulcio-system.svc"
+    value = var.FULCIO_ADDRESS
   }
   set {
     name  = "tenantconfig.signers\\.x509\\.fulcio\\.enabled"
@@ -59,6 +59,64 @@ resource "helm_release" "tekton_chains" {
   }
   set {
     name  = "tenantconfig.transparency\\.url" # Connect chains to rekor service
-    value = "http://rekor-server.rekor-system.svc:3000"
+    value = var.REKOR_ADDRESS
   }
+}
+
+
+variable "REKOR_ADDRESS" {
+  default = "https://rekor.sigstore.dev"
+  description = "URL for rekor"
+  type = string
+}
+
+variable "FULCIO_ADDRESS" {
+  default = "https://fulcio.sigstore.dev/"
+  description = "URL for fulcio"
+  type = string
+}
+
+variable "TK_PIPELINE_HELM_CHART_VERSION" {
+  default     = "v0.1.0"
+  type        = string
+  description = "Helm chart version of tekton pipeline helm chart"
+}
+
+variable "TK_PIPELINE_NAMESPACE" {
+  default     = "tekton-pipelines"
+  type        = string
+  description = "Namespace to deploy tekton charts"
+}
+
+variable "TK_PIPELINE_HELM_LOCAL_PATH" {
+  type        = string
+  description = "Path to local tekton pipeline helm chart"
+}
+
+variable "TK_DASHBOARD_HELM_CHART_VERSION" {
+  default     = "v0.1.0"
+  type        = string
+  description = "Tekton Dashboard of the helm chart to deploy"
+}
+
+variable "TK_DASHBOARD_HELM_LOCAL_PATH" {
+  type        = string
+  description = "Path to local tekton dashboard helm chart"
+}
+
+variable "TK_CHAINS_NAMESPACE" {
+  default     = "tekton-chains"
+  type        = string
+  description = "Namespace to deploy tekton chains"
+}
+
+variable "TK_CHAINS_HELM_CHART_VERSION" {
+  default     = "v0.1.0"
+  type        = string
+  description = "Helm chart version of tekton chains to deploy"
+}
+
+variable "TK_CHAINS_HELM_LOCAL_PATH" {
+  type        = string
+  description = "Path to local tekton chains helm chart"
 }
