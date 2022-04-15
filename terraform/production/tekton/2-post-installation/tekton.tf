@@ -65,15 +65,15 @@ resource "helm_release" "tekton_chains" {
 
 
 variable "REKOR_ADDRESS" {
-  default = "https://rekor.sigstore.dev"
+  default     = "https://rekor.sigstore.dev"
   description = "URL for rekor"
-  type = string
+  type        = string
 }
 
 variable "FULCIO_ADDRESS" {
-  default = "https://fulcio.sigstore.dev/"
+  default     = "https://fulcio.sigstore.dev/"
   description = "URL for fulcio"
-  type = string
+  type        = string
 }
 
 variable "TK_PIPELINE_HELM_CHART_VERSION" {
