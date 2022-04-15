@@ -1,0 +1,9 @@
+apiVersion: v2
+name: hpe-fulcio
+description: Install Fulcio and all necessary components.
+type: application
+version: 0.1.0
+dependencies:
+- name: trillian
+  version: "0.1.6"
+  repository: "https://sigstore.github.io/helm-charts"
