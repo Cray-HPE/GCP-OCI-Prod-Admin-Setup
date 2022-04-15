@@ -85,6 +85,9 @@ jobs:
       contents: read
 
     env:
+      TK_DASHBOARD_HELM_LOCAL_PATH: ${{ inputs.tk_dashboard_helm_local_path }}
+      TK_CHAINS_HELM_LOCAL_PATH: ${{ inputs.tk_chains_helm_local_path }}
+      TK_PIPELINE_HELM_LOCAL_PATH: ${{ inputs.tk_pipeline_helm_local_path }}
       TF_MODE: ${{ inputs.terraform_mode }}
       PROJECT_ID: ${{ inputs.project_id }}
       WORKLOAD_IDENTITY_PROVIDER: ${{ inputs.workload_identity_provider }}
@@ -98,6 +101,8 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # v3
+      with:
+        submodules: recursive
 
     - id: auth
       name: Authenticate to Google Cloud
