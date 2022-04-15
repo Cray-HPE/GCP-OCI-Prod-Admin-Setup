@@ -58,32 +58,21 @@ jobs:
       output_bastion_info: 'true'
 
   post-installation-tf:
-    runs-on: ubuntu-latest
-    needs: infrastructure-tf
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - name: tekton-helm-clone
-        uses: actions/checkout@v3
-        with:
-          repository: git@github.com:Cray-HPE/tekton-helm-charts.git
-          path: tekton-helm-charts
-
-      - name: install-tekton
-        uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
-        if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
-        env:
-          TF_VAR_TK_DASHBOARD_HELM_LOCAL_PATH: ./tekton-helm-charts/charts/tekton-dashboard
-          TF_VAR_TK_CHAINS_HELM_LOCAL_PATH: ./tekton-helm-charts/charts/tekton-chains
-          TF_VAR_TK_PIPELINE_HELM_LOCAL_PATH: ./tekton-helm-charts/charts/tekton-pipeline
-        with:
-          terraform_mode: ${{ github.event.inputs.terraform_mode }}
-          project_id: oci-ci-service-dev
-          workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-          service_account: github-actions@oci-ci-service-dev.iam.gserviceaccount.com
-          terraform_dir: terraform/production/tekton/2-post-installation
-          bastion_access: 'true'
-          bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
-          bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
+      uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
+      needs: infrastructure-tf
+      permissions:
+        id-token: write
+        contents: read
+      if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
+      with:
+        tk_dashboard_helm_local_path: ./tekton-helm-charts/charts/tekton-dashboard
+        tk_chains_helm_local_path: ./tekton-helm-charts/charts/tekton-chains
+        tk_pipeline_helm_local_path: ./tekton-helm-charts/charts/tekton-pipeline
+        terraform_mode: ${{ github.event.inputs.terraform_mode }}
+        project_id: oci-ci-service-dev
+        workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+        service_account: github-actions@oci-ci-service-dev.iam.gserviceaccount.com
+        terraform_dir: terraform/production/tekton/2-post-installation
+        bastion_access: 'true'
+        bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
+        bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}

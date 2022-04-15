@@ -1,0 +1,3 @@
+[submodule "tekton-helm-charts"]
+	path = tekton-helm-charts
+	url = https://github.com/Cray-HPE/tekton-helm-charts
