@@ -39,7 +39,6 @@ on:
         type: choice
         options:
           - 'infra-only'
-          - 'helm-only'
           - 'all'
         default: 'all'
         description: 'Stage of terraform to run.'
@@ -47,7 +46,6 @@ on:
 jobs:
   infrastructure-tf:
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
-    if: ${{ github.event.inputs.terraform_stage != 'helm-only' }}
     permissions:
       id-token: write
       contents: read
