@@ -31,6 +31,11 @@ on:
         type: string
         default: 'plan'
         description: 'Mode to run terraform in.'
+      checkout_submodules:
+        required: false
+        type: string
+        default: 'recursive'
+        description: 'Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules.'
       project_id:
         required: true
         type: string
@@ -99,7 +104,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # v3
       with:
-        submodules: recursive
+        submodules: ${{ inputs.checkout_submodules }}
 
     - id: auth
       name: Authenticate to Google Cloud
