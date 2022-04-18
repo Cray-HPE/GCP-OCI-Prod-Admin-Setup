@@ -77,18 +77,18 @@ jobs:
       bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
 
   deploy-sigstore-helm:
+    needs: infrastructure-tf
+    if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
-    needs: post-installation-tf
     permissions:
       id-token: write
       contents: read
-    if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
     with:
       terraform_mode: ${{ github.event.inputs.terraform_mode }}
       checkout_submodules: 'false'
-      project_id: oci-ci-service-dev
-      workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-      service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
+      project_id: oci-signer-service-dev
+      workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+      service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/signer/3-sigstore-helm
       bastion_access: 'true'
       bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
