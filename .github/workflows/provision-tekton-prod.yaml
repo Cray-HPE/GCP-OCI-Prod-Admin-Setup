@@ -45,33 +45,30 @@ on:
 
 jobs:
   infrastructure-tf:
-    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/tekton-terraform.yml@main
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
     permissions:
       id-token: write
       contents: read
     with:
       terraform_mode: ${{ github.event.inputs.terraform_mode }}
-      project_id: oci-ci-service-dev
+      project_id: oci-tekton-service-dev
       workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-      service_account: github-actions@oci-ci-service-dev.iam.gserviceaccount.com
+      service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/tekton/1-infrastructure
       output_bastion_info: 'true'
 
   post-installation-tf:
-      uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/tekton-terraform.yml@main
+      uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
       needs: infrastructure-tf
       permissions:
         id-token: write
         contents: read
       if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
       with:
-        tk_dashboard_helm_local_path: ./tekton-helm-charts/charts/tekton-dashboard
-        tk_chains_helm_local_path: ./tekton-helm-charts/charts/tekton-chains
-        tk_pipeline_helm_local_path: ./tekton-helm-charts/charts/tekton-pipeline
         terraform_mode: ${{ github.event.inputs.terraform_mode }}
         project_id: oci-ci-service-dev
         workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-        service_account: github-actions@oci-ci-service-dev.iam.gserviceaccount.com
+        service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
         terraform_dir: terraform/production/tekton/2-post-installation
         bastion_access: 'true'
         bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}

@@ -45,7 +45,7 @@ on:
 
 jobs:
   infrastructure-tf:
-    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/signer-terraform.yml@main
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
     permissions:
       id-token: write
       contents: read
@@ -60,7 +60,7 @@ jobs:
   post-installation-tf:
     needs: infrastructure-tf
     if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
-    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/signer-terraform.yml@main
+    uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
     permissions:
       id-token: write
       contents: read
