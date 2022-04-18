@@ -89,7 +89,7 @@ jobs:
       project_id: oci-ci-service-dev
       workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
-      terraform_dir: terraform/production/tekton/3-sigstore-helm
+      terraform_dir: terraform/production/signer/3-sigstore-helm
       bastion_access: 'true'
       bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
       bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
