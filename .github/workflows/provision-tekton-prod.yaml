@@ -42,7 +42,11 @@ on:
           - 'all'
         default: 'all'
         description: 'Stage of terraform to run.'
-
+  workflow_call:
+    secrets:
+      HPE_TEKTON_DEPLOY:
+        description: 'A token to pull hpe tekton helm charts'
+        required: false
 jobs:
   infrastructure-tf:
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
@@ -67,7 +71,7 @@ jobs:
       if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
       with:
         terraform_mode: ${{ github.event.inputs.terraform_mode }}
-        project_id: oci-ci-service-dev
+        project_id: oci-tekton-service-dev
         checkout_submodules: 'true'
         HPE_TEKTON_DEPLOY: ${{ secrets.HPE_TEKTON_DEPLOY}}
         workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
