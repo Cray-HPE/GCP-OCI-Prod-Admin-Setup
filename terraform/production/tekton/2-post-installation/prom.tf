@@ -1,8 +1,9 @@
 resource "helm_release" "prometheus" {
-  name             = "prometheus-community"
-  chart            = "https://prometheus-community.github.io/helm-charts"
+  name             = "prometheus"
+  chart            = "prometheus"
+  repository       = "https://prometheus-community.github.io/helm-charts"
   version          = var.PROM_HELM_CHART_VERSION
-  namespace        = var.TK_PIPELINE_NAMESPACE
+  namespace        = var.PROMETHEUS_NAMESPACE
   create_namespace = true
   recreate_pods    = true
   force_update     = true
@@ -10,6 +11,12 @@ resource "helm_release" "prometheus" {
   values = [
     file("prom_values.yaml")
   ]
+}
+
+variable "PROMETHEUS_NAMESPACE" {
+  description = "Namespace to deploy prom"
+  default     = "prometheus"
+  type        = string
 }
 
 variable "PROM_HELM_CHART_VERSION" {

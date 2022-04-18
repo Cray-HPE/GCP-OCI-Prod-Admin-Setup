@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-project_id = "oci-ci-service-dev"
+project_id = "oci-tekton-service-dev"
 region     = "us-central1"

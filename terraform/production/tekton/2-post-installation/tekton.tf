@@ -1,6 +1,6 @@
 resource "helm_release" "tekton_pipelines" {
   name             = "tekton-pipelines"
-  chart            = var.TK_PIPELINE_HELM_LOCAL_PATH
+  chart            = "${path.module}/${var.TK_PIPELINE_HELM_LOCAL_PATH}"
   version          = var.TK_PIPELINE_HELM_CHART_VERSION
   namespace        = var.TK_PIPELINE_NAMESPACE
   create_namespace = true
@@ -14,8 +14,9 @@ resource "helm_release" "tekton_pipelines" {
 }
 
 resource "helm_release" "tekton_dashboard" {
+  depends_on       = [helm_release.tekton_pipelines]
   name             = "tekton-dashboard"
-  chart            = var.TK_DASHBOARD_HELM_LOCAL_PATH
+  chart            = "${path.module}/${var.TK_DASHBOARD_HELM_LOCAL_PATH}"
   version          = var.TK_DASHBOARD_HELM_CHART_VERSION
   namespace        = var.TK_PIPELINE_NAMESPACE
   create_namespace = false
@@ -25,8 +26,9 @@ resource "helm_release" "tekton_dashboard" {
 }
 
 resource "helm_release" "tekton_chains" {
+  depends_on       = [helm_release.tekton_pipelines]
   name             = "tekton-chains"
-  chart            = var.TK_CHAINS_HELM_LOCAL_PATH
+  chart            = "${path.module}/${var.TK_CHAINS_HELM_LOCAL_PATH}"
   version          = var.TK_CHAINS_HELM_CHART_VERSION
   namespace        = var.TK_CHAINS_NAMESPACE
   create_namespace = true
@@ -91,7 +93,7 @@ variable "TK_PIPELINE_NAMESPACE" {
 variable "TK_PIPELINE_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton pipeline helm chart"
-  default = "../../../../tekton-helm-charts/charts/pipelines"
+  default     = "../../../../tekton-helm-charts/charts/tekton-pipelines"
 }
 
 variable "TK_DASHBOARD_HELM_CHART_VERSION" {
@@ -103,7 +105,7 @@ variable "TK_DASHBOARD_HELM_CHART_VERSION" {
 variable "TK_DASHBOARD_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton dashboard helm chart"
-  default = "../../../../tekton-helm-charts/charts/dashboard"
+  default     = "../../../../tekton-helm-charts/charts/tekton-dashboard"
 }
 
 variable "TK_CHAINS_NAMESPACE" {
@@ -121,5 +123,5 @@ variable "TK_CHAINS_HELM_CHART_VERSION" {
 variable "TK_CHAINS_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton chains helm chart"
-  default = "../../../../tekton-helm-charts/charts/chains"
+  default     = "../../../../tekton-helm-charts/charts/tekton-chains"
 }
