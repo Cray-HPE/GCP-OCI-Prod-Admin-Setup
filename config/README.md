@@ -2,6 +2,8 @@
 
 This directory contains Jobs that need to be run **only one time** to configure Sigstore infrastructure.
 
+These Jobs run in cluster, once [terraform](../terraform/production/signer/) has been completely set up.
+
 Unless you're trying to set up a new instance of Sigstore with new infrastructure, you don't have to worry about running anything in here!
 
 This directory contains:
