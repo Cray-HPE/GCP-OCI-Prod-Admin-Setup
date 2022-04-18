@@ -31,5 +31,5 @@ variable "github_repo" {
 variable "tunnel_accessor_sa" {
   type        = string
   description = "Email of group to give access to the tunnel to"
-  default     = "serviceAccount:github-actions@oci-ci-service-dev.iam.gserviceaccount.com"
+  default     = "serviceAccount:github-actions@oci-tekton-service-dev.iam.gserviceaccount.com"
 }

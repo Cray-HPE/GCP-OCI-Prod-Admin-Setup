@@ -91,6 +91,7 @@ variable "TK_PIPELINE_NAMESPACE" {
 variable "TK_PIPELINE_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton pipeline helm chart"
+  default = "../../../../tekton-helm-charts/charts/pipelines"
 }
 
 variable "TK_DASHBOARD_HELM_CHART_VERSION" {
@@ -102,6 +103,7 @@ variable "TK_DASHBOARD_HELM_CHART_VERSION" {
 variable "TK_DASHBOARD_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton dashboard helm chart"
+  default = "../../../../tekton-helm-charts/charts/dashboard"
 }
 
 variable "TK_CHAINS_NAMESPACE" {
@@ -119,4 +121,5 @@ variable "TK_CHAINS_HELM_CHART_VERSION" {
 variable "TK_CHAINS_HELM_LOCAL_PATH" {
   type        = string
   description = "Path to local tekton chains helm chart"
+  default = "../../../../tekton-helm-charts/charts/chains"
 }

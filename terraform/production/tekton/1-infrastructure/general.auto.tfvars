@@ -1,2 +1,2 @@
-project_id = "oci-ci-service-dev"
+project_id = "oci-tekton-service-dev"
 region     = "us-central1"
