@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Note: the Deployment name must be the same as the Service name specified in
+  # config/400-webhook-service.yaml. If you change this name, you must also
+  # change the value of WEBHOOK_SERVICE_NAME below.
+  name: {{ template "tektonPipelines.fullname". }}-webhook
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "tektonPipelines.labels" . | indent 4 }}
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/component: webhook
+    pipeline.tekton.dev/release: {{ .Chart.AppVersion | quote }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  replicas: {{ .Values.webhook.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webhook
+      app.kubernetes.io/component: webhook
+{{ include "tektonPipelines.labelselector" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: webhook
+        app.kubernetes.io/component: webhook
+{{ include "tektonPipelines.labels" . | indent 8 }}
+        pipeline.tekton.dev/release: {{ .Chart.AppVersion | quote }}
+        app: tekton-pipelines-webhook
+        version: {{ .Chart.AppVersion | quote }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: NotIn
+                    values:
+                      - windows
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: webhook
+                    app.kubernetes.io/component: webhook
+{{ include "tektonPipelines.labels" . | indent 20 }}
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      serviceAccountName: {{ template "tektonPipelines.fullname". }}-webhook
+      containers:
+        - name: webhook
+          image: {{ template "pipelinesWebhook.image" .Values.webhook.image }}
+          resources:
+{{ .Values.webhook.resources | toYaml | indent 12 }}
+          env:
+            - name: SYSTEM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            # If you are changing these names, you will also need to update
+            # the webhook's Role in 200-role.yaml to include the new
+            # values in the "configmaps" "get" rule.
+            - name: CONFIG_ARTIFACT_BUCKET_NAME
+              value: {{ template "tektonPipelines.fullname". }}-artifact-bucket
+            - name: CONFIG_ARTIFACT_PVC_NAME
+              value: {{ template "tektonPipelines.fullname". }}-artifact-pvc
+            - name: CONFIG_DEFAULTS_NAME
+              value: {{ template "tektonPipelines.fullname". }}-defaults
+            - name: CONFIG_LOGGING_NAME
+              value: {{ template "tektonPipelines.fullname". }}-logging
+            - name: CONFIG_OBSERVABILITY_NAME
+              value: {{ template "tektonPipelines.fullname". }}-observability
+            - name: CONFIG_LEADERELECTION_NAME
+              value: {{ template "tektonPipelines.fullname". }}-leader-election
+            - name: CONFIG_FEATURE_FLAGS_NAME
+              value: {{ template "tektonPipelines.fullname". }}-feature-flags
+            - name: WEBHOOK_SERVICE_NAME
+              value: {{ template "tektonPipelines.fullname". }}-webhook
+            - name: WEBHOOK_SECRET_NAME
+              value: {{ template "tektonPipelines.fullname". }}-webhook-certs
+            - name: METRICS_DOMAIN
+              value: tekton.dev/pipeline
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            # User 65532 is the distroless nonroot user ID
+            runAsUser: 65532
+            runAsGroup: 65532
+          ports:
+{{ .Values.webhook.ports | toYaml | indent 12 }}
+{{ .Values.webhook.probes | toYaml | indent 10 }}
+
