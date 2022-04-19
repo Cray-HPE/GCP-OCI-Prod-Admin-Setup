@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "tektonPipelines.fullname". }}-info
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "tektonPipelines.labels" . | indent 4 }}
+data:
+  {{- range $key, $val := .Values.pipelinesInfo }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+{{ include "tektonPipelines.labels" . | indent 4 }}
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/component: controller
+    pipeline.tekton.dev/release: {{ .Chart.AppVersion | quote }}
+    app: tekton-pipelines-controller
+    version: {{ .Chart.AppVersion | quote }}
+  name: {{ template "tektonPipelines.fullname". }}-controller
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+{{ .Values.controllerService.ports | toYaml | indent 4 }}
+  selector:
+{{ include "tektonPipelines.labelselector" . | indent 4 }}
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/component: controller
+

@@ -52,7 +52,6 @@ jobs:
     with:
       terraform_mode: ${{ github.event.inputs.terraform_mode }}
       project_id: oci-tekton-service-dev
-      checkout_submodules: 'false'
       workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/tekton/1-infrastructure
@@ -65,12 +64,9 @@ jobs:
         id-token: write
         contents: read
       if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
-      secrets:
-        HPE_TEKTON_DEPLOY: ${{ secrets.HPE_TEKTON_DEPLOY}}
       with:
         terraform_mode: ${{ github.event.inputs.terraform_mode }}
         project_id: oci-tekton-service-dev
-        checkout_submodules: 'true'
         workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
         service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
         terraform_dir: terraform/production/tekton/2-post-installation

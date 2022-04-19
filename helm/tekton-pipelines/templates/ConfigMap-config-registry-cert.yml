@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "tektonPipelines.fullname". }}-registry-cert
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "tektonPipelines.labels" . | indent 4 }}
+data:
+  {{- range $key, $val := .Values.configRegistryCert }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+
