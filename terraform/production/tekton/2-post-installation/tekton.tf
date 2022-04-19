@@ -1,6 +1,7 @@
 resource "helm_release" "tekton_pipelines" {
   name             = "tekton-pipelines"
-  chart            = "${path.module}/${var.TK_PIPELINE_HELM_LOCAL_PATH}"
+  chart            = "tekton-pipelines"
+  repository       = var.TK_PIPELINE_HELM_REPO
   version          = var.TK_PIPELINE_HELM_CHART_VERSION
   namespace        = var.TK_PIPELINE_NAMESPACE
   create_namespace = true
@@ -16,7 +17,8 @@ resource "helm_release" "tekton_pipelines" {
 resource "helm_release" "tekton_dashboard" {
   depends_on       = [helm_release.tekton_pipelines]
   name             = "tekton-dashboard"
-  chart            = "${path.module}/${var.TK_DASHBOARD_HELM_LOCAL_PATH}"
+  chart            = "tekton-dashboard"
+  repository       = var.TK_DASHBOARD_HELM_REPO
   version          = var.TK_DASHBOARD_HELM_CHART_VERSION
   namespace        = var.TK_PIPELINE_NAMESPACE
   create_namespace = false
@@ -28,7 +30,8 @@ resource "helm_release" "tekton_dashboard" {
 resource "helm_release" "tekton_chains" {
   depends_on       = [helm_release.tekton_pipelines]
   name             = "tekton-chains"
-  chart            = "${path.module}/${var.TK_CHAINS_HELM_LOCAL_PATH}"
+  chart            = "tekton-chains"
+  repository       = var.TK_CHAINS_HELM_REPO
   version          = var.TK_CHAINS_HELM_CHART_VERSION
   namespace        = var.TK_CHAINS_NAMESPACE
   create_namespace = true
@@ -79,7 +82,7 @@ variable "FULCIO_ADDRESS" {
 }
 
 variable "TK_PIPELINE_HELM_CHART_VERSION" {
-  default     = "v0.1.0"
+  default     = "0.2.3"
   type        = string
   description = "Helm chart version of tekton pipeline helm chart"
 }
@@ -90,22 +93,22 @@ variable "TK_PIPELINE_NAMESPACE" {
   description = "Namespace to deploy tekton charts"
 }
 
-variable "TK_PIPELINE_HELM_LOCAL_PATH" {
+variable "TK_PIPELINE_HELM_REPO" {
   type        = string
-  description = "Path to local tekton pipeline helm chart"
-  default     = "../../../../helm/tekton-pipelines"
+  description = "tekton pipeline helm chart"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
 }
 
 variable "TK_DASHBOARD_HELM_CHART_VERSION" {
-  default     = "v0.1.0"
+  default     = "0.2.1"
   type        = string
   description = "Tekton Dashboard of the helm chart to deploy"
 }
 
-variable "TK_DASHBOARD_HELM_LOCAL_PATH" {
+variable "TK_DASHBOARD_HELM_REPO" {
   type        = string
-  description = "Path to local tekton dashboard helm chart"
-  default     = "../../../../helm/tekton-dashboard"
+  description = "tekton dashboard helm chart repo"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
 }
 
 variable "TK_CHAINS_NAMESPACE" {
@@ -115,13 +118,13 @@ variable "TK_CHAINS_NAMESPACE" {
 }
 
 variable "TK_CHAINS_HELM_CHART_VERSION" {
-  default     = "v0.1.0"
+  default     = "0.2.4"
   type        = string
   description = "Helm chart version of tekton chains to deploy"
 }
 
-variable "TK_CHAINS_HELM_LOCAL_PATH" {
+variable "TK_CHAINS_HELM_REPO" {
   type        = string
-  description = "Path to local tekton chains helm chart"
-  default     = "../../../../helm/tekton-chains"
+  description = "tekton chains helm chart repo"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
 }
