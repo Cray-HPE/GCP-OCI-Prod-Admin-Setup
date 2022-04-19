@@ -87,8 +87,8 @@ module "fulcio" {
   project_id   = var.project_id
   cluster_name = var.cluster_name
 
-  // Don't enable GCP CA service since we're using a provided intermediate
-  enable_ca    = false
+  # TODO (priyawadhwa): Disable this once we have the intermediate cert
+  enable_ca    = true
   ca_pool_name = "sigstore-ca"
 
   // KMS
