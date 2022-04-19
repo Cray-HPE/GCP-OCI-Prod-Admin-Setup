@@ -109,7 +109,7 @@ jobs:
       uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # v3
 
     - name: Checkout submodules
-      if: ${{ inputs.checkout_submodules }}
+      if: ${{ inputs.checkout_submodules == 'true' }}
       uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # v3
       with:
         repository: git@github.com:Cray-HPE/tekton-helm-charts.git
