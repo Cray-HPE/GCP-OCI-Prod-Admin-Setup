@@ -56,3 +56,27 @@ variable "tunnel_accessor_sa" {
   description = "Email of group to give access to the tunnel to"
   default     = "serviceAccount:github-actions@oci-signer-service-dev.iam.gserviceaccount.com"
 }
+
+// Network variables
+variable "network_name" {
+  type = string
+  description = "Name of the private network to set up in"
+  default = "oci-signer-service"
+}
+
+variable "network_self_link" {
+  type = string
+  default =  "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/global/networks/oci-signer-service"
+}
+
+variable "subnetwork_name" {
+  type        = string
+  description = "Subnetwork name"
+  default     = "primary-us-central-signer"
+}
+
+variable "subnetwork_self_link" {
+  type = string
+  description = "Subnetwork to use"
+  default = "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/regions/us-central1/subnetworks/primary-us-central-signer"
+}
