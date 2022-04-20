@@ -1,16 +1,21 @@
 variable "network_name" {
-  default = "oci-signer-service"
+  default = "oci-build-service"
   type = string
   description = "Name of the network to deploy too"
 }
 
 variable "subnetwork_name" {
-  default = "primary-us-central-signer"
+  default = "primary-us-central-builder"
   type = string
   description = "Name of the subnetwork to deploy too"
 }
+
 data "google_compute_network" "primary" {
   name = var.network_name
+}
+
+data "google_compute_subnetwork" "sub"{
+  name = var.subnetwork_name
 }
 
 // Bastion
@@ -19,7 +24,7 @@ module "bastion" {
 
   project_id         = var.project_id
   region             = var.region
-  network            = var.network_name
+  network            = data.google_compute_network.primary.name
   subnetwork         = var.subnetwork_name
   tunnel_accessor_sa = var.tunnel_accessor_sa
 }
@@ -36,8 +41,9 @@ module "cluster" {
   autoscaling_max_node = 10
 
 
-  network                       = var.network_name
-  subnetwork                    = var.subnetwork_name
+
+  network            = data.google_compute_network.primary.name
+  subnetwork         = var.subnetwork_name
   master_ipv4_cidr_block = var.master_ipv4_cidr_block
   cluster_secondary_range_name  = "pod-range"
   services_secondary_range_name = "svc-range"
@@ -61,7 +67,8 @@ variable "master_ipv4_cidr_block" {
 resource "google_compute_firewall" "master-webhooks" {
   name      = "gke-${var.cluster_name}-webhooks-${random_id.suffix.hex}"
   project   = var.project_id
-  network   = var.network_name
+
+  network            = data.google_compute_network.primary.name
   direction = "INGRESS"
 
 
