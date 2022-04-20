@@ -214,12 +214,13 @@ resource "helm_release" "ctlog" {
   repository       = "https://sigstore.github.io/helm-charts"
   chart            = "ctlog"
   namespace        = "ctlog-system"
-  create_namespace = true
+  create_namespace = false
   atomic           = true
   version          = "0.2.11"
 
   depends_on = [
-    helm_release.fulcio
+    helm_release.fulcio,
+    kubectl_manifest.ctlog_priv_key_external_secret
   ]
 
   values = [
@@ -231,18 +232,15 @@ resource "helm_release" "ctlog" {
     forceNamespace: ctlog-system
     fullnameOverride: ctlog
     createcerts:
-      fullnameOverride: ctlog-createcerts
+      # Certs are stored in GCP Secret Manager
+      enabled: false
     createtree:
-      fullnameOverride: ctlog-createtree
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65533
+      # Tree ID is stored in GCP Secret Manager
+      enabled: false
     createctconfig:
-      fullnameOverride: ctlog-createctconfig
-      fulcioURL: http://fulcio-server.fulcio-system.svc
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65533
+      # All relevant data for the CT Log config is stored in GCP Secret Manager
+      # The config is created in `ctlog_config.tf`
+      enabled: false
     server:
       replicaCount: 3
       podAnnotations:
