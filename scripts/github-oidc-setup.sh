@@ -205,3 +205,13 @@ gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
   --project="${PROJECT_ID}" \
   --role="roles/secretmanager.admin" \
   --member="serviceAccount:${SERVICE_ACCOUNT}"
+
+# TODO: (priyawadhwa): remove once we have the intermediate cert set up
+
+# Adding binding is idempotent.
+# For creating Certificate Authority.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/privateca.caManager" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+  
