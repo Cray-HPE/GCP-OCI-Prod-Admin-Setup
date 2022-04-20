@@ -7,7 +7,8 @@ resource "helm_release" "tekton_pipelines" {
   create_namespace = true
   recreate_pods    = true
   force_update     = true
-  cleanup_on_fail  = true
+  cleanup_on_fail  = false
+  timeout = 60
   set {
     name  = "feature_flags.disable-affinity-assistant"
     value = "true"
@@ -82,7 +83,7 @@ variable "FULCIO_ADDRESS" {
 }
 
 variable "TK_PIPELINE_HELM_CHART_VERSION" {
-  default     = "0.2.3"
+  default     = "0.2.2"
   type        = string
   description = "Helm chart version of tekton pipeline helm chart"
 }
@@ -96,7 +97,7 @@ variable "TK_PIPELINE_NAMESPACE" {
 variable "TK_PIPELINE_HELM_REPO" {
   type        = string
   description = "tekton pipeline helm chart"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
 }
 
 variable "TK_DASHBOARD_HELM_CHART_VERSION" {
@@ -108,7 +109,7 @@ variable "TK_DASHBOARD_HELM_CHART_VERSION" {
 variable "TK_DASHBOARD_HELM_REPO" {
   type        = string
   description = "tekton dashboard helm chart repo"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
 }
 
 variable "TK_CHAINS_NAMESPACE" {
@@ -126,5 +127,5 @@ variable "TK_CHAINS_HELM_CHART_VERSION" {
 variable "TK_CHAINS_HELM_REPO" {
   type        = string
   description = "tekton chains helm chart repo"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts/"
+  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
 }

@@ -1,20 +1,20 @@
 // Network outputs
 
 output "network_name" {
-  value = module.network.network_name
+  value = data.google_compute_network.primary.name
 }
 
 output "network_self_link" {
-  value = module.network.network_self_link
+  value = data.google_compute_network.primary.self_link
 }
 
 output "subnetwork_self_link" {
-  value = module.network.subnetwork_self_link
+  value = data.google_compute_network.primary.subnetworks_self_links
 }
 
-output "secondary_ip_range" {
+/*output "secondary_ip_range" {
   value = module.network.secondary_ip_range
-}
+}*/
 
 // Bastion outputs
 
