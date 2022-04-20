@@ -208,3 +208,61 @@ resource "helm_release" "fulcio" {
     EOF
   ]
 }
+
+resource "helm_release" "ctlog" {
+  name             = "ctlog"
+  repository       = "https://sigstore.github.io/helm-charts"
+  chart            = "ctlog"
+  namespace        = "ctlog-system"
+  create_namespace = true
+  atomic           = true
+  version          = "0.2.11"
+
+  depends_on = [
+    helm_release.fulcio
+  ]
+
+  values = [
+    <<EOF
+    enabled: true
+    namespace:
+      name: ctlog-system
+      create: false
+    forceNamespace: ctlog-system
+    fullnameOverride: ctlog
+    createcerts:
+      fullnameOverride: ctlog-createcerts
+    createtree:
+      fullnameOverride: ctlog-createtree
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
+    createctconfig:
+      fullnameOverride: ctlog-createctconfig
+      fulcioURL: http://fulcio-server.fulcio-system.svc
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
+    server:
+      replicaCount: 3
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "6963"
+      ingress:
+        # TODO: (priyawadhwa) enable ingress
+        enabled: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
+      resources:
+        requests:
+          memory: "1G"
+          cpu: "0.5"
+    trillian:
+      logServer:
+        portRPC: 8090
+        portHTTP: 8091
+    EOF
+  ]
+}
