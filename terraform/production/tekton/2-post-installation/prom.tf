@@ -7,8 +7,8 @@ resource "helm_release" "prometheus" {
   create_namespace = true
   recreate_pods    = true
   force_update     = true
-  cleanup_on_fail  = false
-  timeout = 60
+  cleanup_on_fail  = true
+  timeout = 300
   values = [
     file("prom_values.yaml")
   ]
@@ -22,5 +22,5 @@ variable "PROMETHEUS_NAMESPACE" {
 
 variable "PROM_HELM_CHART_VERSION" {
   description = "Version of the Prom helm chart"
-  default     = "15.8.5"
+  default     = "15.8.4"
 }
