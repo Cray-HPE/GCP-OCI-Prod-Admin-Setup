@@ -52,7 +52,8 @@ module "cluster" {
   project_id           = var.project_id
   node_pool_name       = local.cluster_name
   cluster_name         = local.cluster_name
-  initial_node_count   = 1
+  initial_node_count   = 3
+  autoscaling_min_node = 3
   autoscaling_max_node = 10
 
   network                       = data.google_compute_network.primary.name
