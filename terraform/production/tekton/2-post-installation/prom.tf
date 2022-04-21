@@ -8,7 +8,7 @@ resource "helm_release" "prometheus" {
   recreate_pods    = true
   force_update     = true
   cleanup_on_fail  = true
-  timeout = 300
+  timeout          = 300
   values = [
     file("prom_values.yaml")
   ]
