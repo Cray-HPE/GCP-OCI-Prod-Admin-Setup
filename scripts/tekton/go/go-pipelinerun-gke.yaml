@@ -24,7 +24,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: go-shared-task-storage
+  name: go-shared-task
 spec:
   resources:
     requests:
@@ -36,7 +36,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: go-dependencies-storage
+  name: go-dependencies
 spec:
   resources:
     requests:
@@ -51,7 +51,6 @@ kind: PipelineRun
 metadata:
   name: go-build-pipeline-run
 spec:
-  serviceAccountName: gke-user
   params:
     - name: git-url
       value: "https://github.com/vaikas/spiffefulciotest.git"
@@ -61,10 +60,12 @@ spec:
       value: "./cmd"
     - name: SIGSTORE_CT_LOG_PUBLIC_KEY_FILE
       value: ""
+    - name: COSIGN_REPOSITORY
+      value: gcr.io/oci-build-service/
     - name: KO_DOCKER_REPO
-      value: gcr.io/chainguard-dev/
+      value: gcr.io/oci-build-service/
     - name: fulcio-endpoint
-      value: "http://fulcio.sigstore.dev"
+      value: "https://fulcio.sigstore.dev"
     - name: rekor-endpoint
       value: "https://rekor.sigstore.dev"
   pipelineRef:
@@ -72,7 +73,7 @@ spec:
   workspaces:
   - name: git-source # must match workspace name in Pipeline
     persistentVolumeClaim:
-      claimName: go-shared-task-storage # this PVC must already exist
+      claimName: go-shared-task # this PVC must already exist
   - name: dependencies # must match workspace name in Pipeline
     persistentVolumeClaim:
-      claimName: go-dependencies-storage # this PVC must already exist
+      claimName: go-dependencies # this PVC must already exist

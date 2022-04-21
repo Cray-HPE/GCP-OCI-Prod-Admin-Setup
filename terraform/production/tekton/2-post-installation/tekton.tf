@@ -10,7 +10,7 @@ resource "helm_release" "tekton_pipelines" {
   cleanup_on_fail  = false
   timeout          = 60
   set {
-    name  = "feature_flags.disable-affinity-assistant"
+    name  = "featureFlags.disable-affinity-assistant"
     value = "true"
   }
 }
