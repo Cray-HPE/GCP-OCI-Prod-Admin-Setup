@@ -60,13 +60,13 @@ spec:
     - name: MAIN_DIR
       value: "./cmd"
     - name: SIGSTORE_CT_LOG_PUBLIC_KEY_FILE
-      value: "/data/ctlog-public.pem"
+      value: ""
     - name: KO_DOCKER_REPO
       value: gcr.io/chainguard-dev/
     - name: fulcio-endpoint
-      value: "http://fulcio.fulcio-system.svc"
+      value: "http://fulcio.sigstore.dev"
     - name: rekor-endpoint
-      value: "http://rekor-server.rekor-system.svc:3000"
+      value: "https://rekor.sigstore.dev"
   pipelineRef:
     name: go-build-pipeline
   workspaces:
