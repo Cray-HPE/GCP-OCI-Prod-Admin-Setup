@@ -1,13 +1,15 @@
-variable "network_name" {
-  default     = "oci-build-service"
-  type        = string
-  description = "Name of the network to deploy too"
-}
+// Private network
+module "network" {
+  source = "../../modules/network"
 
-variable "subnetwork_name" {
-  default     = "primary-us-central-builder"
-  type        = string
-  description = "Name of the subnetwork to deploy too"
+  region     = var.region
+  project_id = var.project_id
+
+  cluster_name = var.cluster_name
+
+  network_name         = var.network_name
+  subnetwork_name      = var.subnetwork_name
+  subnetwork_self_link = var.subnetwork_self_link
 }
 
 data "google_compute_network" "primary" {
@@ -29,24 +31,26 @@ module "bastion" {
   tunnel_accessor_sa = var.tunnel_accessor_sa
 }
 
+locals {
+  cluster_name = "${var.cluster_name}-${var.env}"
+}
+
 module "cluster" {
   // The double slash '//' syntax represents the submodule in the git directory
   source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/gke_cluster"
 
   region               = var.region
   project_id           = var.project_id
-  node_pool_name       = var.cluster_name
-  cluster_name         = var.cluster_name
-  initial_node_count   = 3
+  node_pool_name       = local.cluster_name
+  cluster_name         = local.cluster_name
+  initial_node_count   = 1
   autoscaling_max_node = 10
-
-
 
   network                       = data.google_compute_network.primary.name
   subnetwork                    = var.subnetwork_name
   master_ipv4_cidr_block        = var.master_ipv4_cidr_block
-  cluster_secondary_range_name  = "pod-range"
-  services_secondary_range_name = "svc-range"
+  cluster_secondary_range_name  = var.cluster_secondary_range_name
+  services_secondary_range_name = var.services_secondary_range_name
 
   bastion_ip_address = module.bastion.ip_address
 
@@ -65,7 +69,7 @@ variable "master_ipv4_cidr_block" {
 
 //needed till https://github.com/sigstore/scaffolding/pull/123/files is merged
 resource "google_compute_firewall" "master-webhooks" {
-  name    = "gke-${var.cluster_name}-webhooks-${random_id.suffix.hex}"
+  name    = "gke-${local.cluster_name}-webhooks-${random_id.suffix.hex}"
   project = var.project_id
 
   network   = data.google_compute_network.primary.name
@@ -92,6 +96,6 @@ module "policy_bindings" {
   region     = var.region
   project_id = var.project_id
 
-  cluster_name = var.cluster_name
+  cluster_name = local.cluster_name
   github_repo  = var.github_repo
 }

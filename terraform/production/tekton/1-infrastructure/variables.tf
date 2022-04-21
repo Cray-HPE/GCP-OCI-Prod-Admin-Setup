@@ -1,3 +1,28 @@
+variable "network_name" {
+  default     = "oci-build-service"
+  type        = string
+  description = "Name of the network to deploy too"
+}
+
+variable "subnetwork_name" {
+  default     = "primary-us-central-builder"
+  type        = string
+  description = "Name of the subnetwork to deploy too"
+}
+
+variable "cluster_secondary_range_name" {
+  type        = string
+  description = "IP range for pods"
+  default     = "pod-range"
+}
+
+variable "services_secondary_range_name" {
+  type        = string
+  description = "IP range for services"
+  default     = "svc-range"
+}
+
+
 variable "project_id" {
   type = string
   validation {
@@ -6,12 +31,31 @@ variable "project_id" {
   }
 }
 
+variable "network_self_link" {
+  type    = string
+  default = "https://www.googleapis.com/compute/v1/projects/oci-tekton-service-dev/global/networks/oci-build-service"
+}
+
+
+variable "subnetwork_self_link" {
+  type        = string
+  description = "Subnetwork to use"
+  default     = "https://www.googleapis.com/compute/v1/projects/oci-tekton-service-dev/regions/us-central1/subnetworks/primary-us-central-builder"
+}
+
+
 
 // Optional values that can be overridden or appended to if desired.
 variable "cluster_name" {
   description = "The name to give the new Kubernetes cluster."
   type        = string
-  default     = "tekton-prod"
+  default     = "tekton"
+}
+
+variable "env" {
+  description = "environment for deployment"
+  type        = string
+  default     = "dev"
 }
 
 variable "region" {

@@ -6,6 +6,16 @@ variable "project_id" {
   }
 }
 
+variable "env" {
+  description = "environment for deployment"
+  type        = string
+  default     = "dev"
+}
+
+locals {
+  cluster_name = "${var.cluster_name}-${var.env}"
+}
+
 variable "region" {
   description = "The region in which to create the VPC network"
   type        = string
@@ -15,7 +25,7 @@ variable "region" {
 variable "cluster_name" {
   description = "The name to give the new Kubernetes cluster."
   type        = string
-  default     = "tekton-prod"
+  default     = "tekton"
 }
 
 variable "github_repo" {
