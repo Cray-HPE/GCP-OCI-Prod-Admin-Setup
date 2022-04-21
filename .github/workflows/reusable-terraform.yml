@@ -130,6 +130,7 @@ jobs:
         sleep 30
 
     - name: terraform plan
+      timeout-minutes: 2
       run: |
         pushd ${{ env.TF_DIR }}
         terraform plan
