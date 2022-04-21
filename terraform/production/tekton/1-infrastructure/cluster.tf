@@ -7,9 +7,13 @@ module "network" {
 
   cluster_name = var.cluster_name
 
-  network_name         = var.network_name
-  subnetwork_name      = var.subnetwork_name
-  subnetwork_self_link = var.subnetwork_self_link
+  network_name                = var.network_name
+  network_self_link           = var.network_self_link
+  subnetwork_name             = var.subnetwork_name
+  subnetwork_self_link        = var.subnetwork_self_link
+  secondary_ip_range_name_pod = var.secondary_ip_range_name_pod
+  secondary_ip_range_name_svc = var.secondary_ip_range_name_svc
+
 }
 
 data "google_compute_network" "primary" {
@@ -49,8 +53,8 @@ module "cluster" {
   network                       = data.google_compute_network.primary.name
   subnetwork                    = var.subnetwork_name
   master_ipv4_cidr_block        = var.master_ipv4_cidr_block
-  cluster_secondary_range_name  = var.cluster_secondary_range_name
-  services_secondary_range_name = var.services_secondary_range_name
+  cluster_secondary_range_name  = var.secondary_ip_range_name_pod
+  services_secondary_range_name = var.secondary_ip_range_name_svc
 
   bastion_ip_address = module.bastion.ip_address
 
