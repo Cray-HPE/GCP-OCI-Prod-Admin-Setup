@@ -10,13 +10,13 @@ variable "subnetwork_name" {
   description = "Name of the subnetwork to deploy too"
 }
 
-variable "cluster_secondary_range_name" {
+variable "secondary_ip_range_name_pod" {
   type        = string
   description = "IP range for pods"
   default     = "pod-range"
 }
 
-variable "services_secondary_range_name" {
+variable "secondary_ip_range_name_svc" {
   type        = string
   description = "IP range for services"
   default     = "svc-range"
