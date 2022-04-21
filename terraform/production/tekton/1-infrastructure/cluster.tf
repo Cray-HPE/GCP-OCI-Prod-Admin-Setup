@@ -24,6 +24,11 @@ data "google_compute_subnetwork" "sub" {
   name = var.subnetwork_name
 }
 
+resource "google_container_registry" "registry" {
+  project  = var.project_id
+  location = "US"
+}
+
 // Bastion
 module "bastion" {
   source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion"
