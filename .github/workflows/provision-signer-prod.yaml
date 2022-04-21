@@ -75,7 +75,7 @@ jobs:
       bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
 
   deploy-sigstore-helm:
-    needs: infrastructure-tf
+    needs: post-installation-tf
     if: ${{ github.event.inputs.terraform_stage != 'infra-only' }}
     uses: Cray-HPE/GCP-OCI-Prod-Admin-Setup/.github/workflows/reusable-terraform.yml@main
     permissions:
