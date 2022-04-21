@@ -1,12 +1,12 @@
 variable "network_name" {
-  default = "oci-build-service"
-  type = string
+  default     = "oci-build-service"
+  type        = string
   description = "Name of the network to deploy too"
 }
 
 variable "subnetwork_name" {
-  default = "primary-us-central-builder"
-  type = string
+  default     = "primary-us-central-builder"
+  type        = string
   description = "Name of the subnetwork to deploy too"
 }
 
@@ -14,7 +14,7 @@ data "google_compute_network" "primary" {
   name = var.network_name
 }
 
-data "google_compute_subnetwork" "sub"{
+data "google_compute_subnetwork" "sub" {
   name = var.subnetwork_name
 }
 
@@ -33,18 +33,18 @@ module "cluster" {
   // The double slash '//' syntax represents the submodule in the git directory
   source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/gke_cluster"
 
-  region     = var.region
-  project_id = var.project_id
-  node_pool_name = var.cluster_name
-  cluster_name = var.cluster_name
-  initial_node_count = 3
+  region               = var.region
+  project_id           = var.project_id
+  node_pool_name       = var.cluster_name
+  cluster_name         = var.cluster_name
+  initial_node_count   = 3
   autoscaling_max_node = 10
 
 
 
-  network            = data.google_compute_network.primary.name
-  subnetwork         = var.subnetwork_name
-  master_ipv4_cidr_block = var.master_ipv4_cidr_block
+  network                       = data.google_compute_network.primary.name
+  subnetwork                    = var.subnetwork_name
+  master_ipv4_cidr_block        = var.master_ipv4_cidr_block
   cluster_secondary_range_name  = "pod-range"
   services_secondary_range_name = "svc-range"
 
@@ -65,10 +65,10 @@ variable "master_ipv4_cidr_block" {
 
 //needed till https://github.com/sigstore/scaffolding/pull/123/files is merged
 resource "google_compute_firewall" "master-webhooks" {
-  name      = "gke-${var.cluster_name}-webhooks-${random_id.suffix.hex}"
-  project   = var.project_id
+  name    = "gke-${var.cluster_name}-webhooks-${random_id.suffix.hex}"
+  project = var.project_id
 
-  network            = data.google_compute_network.primary.name
+  network   = data.google_compute_network.primary.name
   direction = "INGRESS"
 
 

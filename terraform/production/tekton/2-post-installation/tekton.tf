@@ -8,7 +8,7 @@ resource "helm_release" "tekton_pipelines" {
   recreate_pods    = true
   force_update     = true
   cleanup_on_fail  = false
-  timeout = 60
+  timeout          = 60
   set {
     name  = "feature_flags.disable-affinity-assistant"
     value = "true"
