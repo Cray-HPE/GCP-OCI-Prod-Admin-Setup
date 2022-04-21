@@ -215,8 +215,8 @@ resource "helm_release" "ctlog" {
   chart            = "ctlog"
   namespace        = "ctlog-system"
   create_namespace = false
-  atomic           = true
-  version          = "0.2.11"
+  atomic           = false
+  version          = "0.2.12"
 
   depends_on = [
     helm_release.fulcio,
@@ -243,6 +243,10 @@ resource "helm_release" "ctlog" {
       enabled: false
     server:
       replicaCount: 3
+      config:
+        secret:
+          enabled: true
+          name: ctlog-config
       podAnnotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/metrics"
