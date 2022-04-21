@@ -31,34 +31,6 @@ resource "google_project_service" "service" {
   disable_on_destroy = false
 }
 
-
-// Create subnets
-resource "google_compute_subnetwork" "subnetwork" {
-  name          = var.subnetwork_name
-  project       = var.project_id
-  network       = var.network_self_link
-  region        = var.region
-  ip_cidr_range = "10.0.0.0/16"
-
-  private_ip_google_access = true
-
-  secondary_ip_range {
-    range_name    = format("%s-pod-range", var.cluster_name)
-    ip_cidr_range = "10.1.0.0/16"
-  }
-
-  secondary_ip_range {
-    range_name    = format("%s-svc-range", var.cluster_name)
-    ip_cidr_range = "10.2.0.0/20"
-  }
-
-  log_config {
-    aggregation_interval = "INTERVAL_10_MIN"
-    flow_sampling        = 0.5
-    metadata             = "INCLUDE_ALL_METADATA"
-  }
-}
-
 // Create an external NAT IP
 resource "google_compute_address" "nat" {
   name    = format("%s-nat-ip", var.cluster_name)
@@ -94,13 +66,12 @@ resource "google_compute_router_nat" "nat" {
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
   subnetwork {
-    name                    = google_compute_subnetwork.subnetwork.self_link
+    name                    = var.subnetwork_self_link
     source_ip_ranges_to_nat = ["PRIMARY_IP_RANGE", "LIST_OF_SECONDARY_IP_RANGES"]
 
     secondary_ip_range_names = [
-      google_compute_subnetwork.subnetwork.secondary_ip_range.0.range_name,
-      google_compute_subnetwork.subnetwork.secondary_ip_range.1.range_name,
+      var.secondary_ip_range_name_pod,
+      var.secondary_ip_range_name_svc
     ]
   }
-  depends_on = [google_compute_subnetwork.subnetwork]
 }

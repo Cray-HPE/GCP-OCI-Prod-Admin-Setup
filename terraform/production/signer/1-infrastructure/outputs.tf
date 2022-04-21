@@ -1,13 +1,3 @@
-// Network outputs
-
-output "subnetwork_self_link" {
-  value = module.network.subnetwork_self_link
-}
-
-output "secondary_ip_range" {
-  value = module.network.secondary_ip_range
-}
-
 // Bastion outputs
 
 output "ssh_cmd" {

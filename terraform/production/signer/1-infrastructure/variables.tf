@@ -59,14 +59,14 @@ variable "tunnel_accessor_sa" {
 
 // Network variables
 variable "network_name" {
-  type = string
+  type        = string
   description = "Name of the private network to set up in"
-  default = "oci-signer-service"
+  default     = "oci-signer-service"
 }
 
 variable "network_self_link" {
-  type = string
-  default =  "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/global/networks/oci-signer-service"
+  type    = string
+  default = "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/global/networks/oci-signer-service"
 }
 
 variable "subnetwork_name" {
@@ -76,7 +76,19 @@ variable "subnetwork_name" {
 }
 
 variable "subnetwork_self_link" {
-  type = string
+  type        = string
   description = "Subnetwork to use"
-  default = "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/regions/us-central1/subnetworks/primary-us-central-signer"
+  default     = "https://www.googleapis.com/compute/v1/projects/oci-signer-service-dev/regions/us-central1/subnetworks/primary-us-central-signer"
+}
+
+variable "secondary_ip_range_name_pod" {
+  type        = string
+  description = "IP range for pods"
+  default     = "sigstore-prod-pod-range"
+}
+
+variable "secondary_ip_range_name_svc" {
+  type        = string
+  description = "IP range for services"
+  default     = "sigstore-prod-svc-range"
 }

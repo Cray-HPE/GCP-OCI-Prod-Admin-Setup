@@ -21,7 +21,7 @@ module "bastion" {
   project_id         = var.project_id
   region             = var.region
   network            = var.network_name
-  subnetwork         = module.network.subnetwork_self_link
+  subnetwork         = var.subnetwork_self_link
   tunnel_accessor_sa = var.tunnel_accessor_sa
 
   depends_on = [
@@ -39,9 +39,9 @@ module "cluster" {
   cluster_name = var.cluster_name
 
   network                       = var.network_self_link
-  subnetwork                    = module.network.subnetwork_self_link
-  cluster_secondary_range_name  = module.network.secondary_ip_range.0.range_name
-  services_secondary_range_name = module.network.secondary_ip_range.1.range_name
+  subnetwork                    = var.subnetwork_self_link
+  cluster_secondary_range_name  = var.secondary_ip_range_name_pod
+  services_secondary_range_name = var.secondary_ip_range_name_svc
 
   bastion_ip_address = module.bastion.ip_address
 
