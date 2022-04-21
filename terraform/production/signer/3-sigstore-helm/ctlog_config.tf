@@ -48,3 +48,30 @@ YAML
     kubectl_manifest.ctlog_namespace
   ]
 }
+
+resource "kubectl_manifest" "ctlog_config_external_secret" {
+  yaml_body = <<YAML
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: ctlog-config
+  namespace: ctlog-system
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcp-backend
+  target:
+    name: ctlog-config
+    template:
+      data:
+        config: "{{ .config | toString }}"  # <-- convert []byte to string
+  data:
+  - secretKey: config
+    remoteRef:
+      key: ctlog-config
+YAML
+
+  depends_on = [
+    kubectl_manifest.ctlog_namespace
+  ]
+}
