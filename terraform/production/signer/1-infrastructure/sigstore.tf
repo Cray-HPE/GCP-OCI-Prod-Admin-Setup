@@ -115,7 +115,7 @@ module "rekor" {
   cluster_name = var.cluster_name
 
   // Network
-  network = var.network_name
+  network = var.network_self_link
 
   // Storage
   attestation_bucket = var.attestation_bucket
