@@ -209,6 +209,71 @@ resource "helm_release" "fulcio" {
   ]
 }
 
+resource "helm_release" "rekor" {
+  name             = "rekor"
+  repository       = "https://sigstore.github.io/helm-charts"
+  chart            = "rekor"
+  namespace        = "rekor-system"
+  create_namespace = true
+  atomic           = true
+  version          = "0.2.28"
+
+  depends_on = [
+    helm_release.trillian
+  ]
+
+  values = [
+    <<EOF
+    enabled: true
+    namespace:
+      name: rekor-system
+      create: true
+    forceNamespace: rekor-system
+    trillian:
+      enabled: false
+      logServer:
+        portRPC: 8090
+        portHTTP: 8091
+    createtree:
+      enabled: false
+    redis:
+      enabled: false
+      hostname: "10.213.1.4"
+    server:
+      attestation_storage:
+        bucket: "rekor-oci-signer-service"
+        enabled: true
+        persistence:
+          enabled: false
+      config:
+        key: "6800883524548689767"
+      enabled: true
+      signer: gcpkms://projects/oci-signer-service-dev/locations/global/keyRings/rekor-keyring/cryptoKeys/rekor-key
+      ingress:
+        # TODO (priyawadhwa) Fix when we know what to do here.
+        enabled: false
+      logging:
+        production: true
+      fullnameOverride: rekor-server
+      port: 80
+      replicaCount: 3
+      resources:
+        requests:
+          memory: "1G"
+          cpu: "0.5"
+      retrieve_api:
+        enabled: true
+      serviceAccount:
+        annotations:
+          iam.gke.io/gcp-service-account: sigstore-prod-rekor-sa@oci-signer-service-dev.iam.gserviceaccount.com
+        create: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
+    EOF
+  ]
+}
+
 resource "helm_release" "ctlog" {
   name             = "ctlog"
   repository       = "https://sigstore.github.io/helm-charts"
