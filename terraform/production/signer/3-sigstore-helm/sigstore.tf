@@ -215,7 +215,7 @@ resource "helm_release" "rekor" {
   chart            = "rekor"
   namespace        = "rekor-system"
   create_namespace = true
-  atomic           = true
+  atomic           = false
   version          = "0.2.28"
 
   depends_on = [
@@ -227,7 +227,7 @@ resource "helm_release" "rekor" {
     enabled: true
     namespace:
       name: rekor-system
-      create: true
+      create: false
     forceNamespace: rekor-system
     trillian:
       enabled: false
@@ -245,6 +245,9 @@ resource "helm_release" "rekor" {
         enabled: true
         persistence:
           enabled: false
+      # TODO: Remove once we aren't using a LoadBalancer
+      service:
+        type: LoadBalancer
       config:
         key: "6800883524548689767"
       enabled: true
