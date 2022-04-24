@@ -73,6 +73,7 @@ jobs:
       bastion_access: 'true'
       bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
       bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
+      output_bastion_info: 'true'
 
   deploy-sigstore-helm:
     needs: post-installation-tf
@@ -88,5 +89,5 @@ jobs:
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/signer/3-sigstore-helm
       bastion_access: 'true'
-      bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
-      bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
+      bastion_name: ${{ needs.post-installation-tf.outputs.bastion_name }}
+      bastion_zone: ${{ needs.post-installation-tf.outputs.bastion_zone }}
