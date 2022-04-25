@@ -215,8 +215,8 @@ resource "helm_release" "rekor" {
   chart            = "rekor"
   namespace        = "rekor-system"
   create_namespace = true
-  atomic           = false
-  version          = "0.2.28"
+  atomic           = true
+  version          = "0.2.29"
 
   depends_on = [
     helm_release.trillian
@@ -241,15 +241,15 @@ resource "helm_release" "rekor" {
       hostname: "10.213.1.4"
     server:
       attestation_storage:
-        bucket: "rekor-oci-signer-service"
+        bucket: "gs://rekor-oci-signer-service"
         enabled: true
         persistence:
           enabled: false
+      config:
+        treeID: "8990870585810304014"
       # TODO: Remove once we aren't using a LoadBalancer
       service:
         type: LoadBalancer
-      config:
-        key: "6800883524548689767"
       enabled: true
       signer: gcpkms://projects/oci-signer-service-dev/locations/global/keyRings/rekor-keyring/cryptoKeys/rekor-key
       ingress:
