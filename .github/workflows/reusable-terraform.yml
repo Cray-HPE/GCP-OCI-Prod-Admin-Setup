@@ -47,6 +47,10 @@ on:
         required: true
         type: string
         description: 'Terraform directory to operate on.'
+      terraform_infra_dir:
+        required: false
+        type: string
+        description: 'Terraform directory infrastructure and outputs live in'
       output_bastion_info:
         required: false
         type: string
