@@ -88,6 +88,7 @@ jobs:
       PROJECT_ID: ${{ inputs.project_id }}
       WORKLOAD_IDENTITY_PROVIDER: ${{ inputs.workload_identity_provider }}
       SERVICE_ACCOUNT: ${{ inputs.service_account }}
+      TF_INFRA_DIR: ${{ inputs.terraform_infra_dir }}
       TF_DIR: ${{ inputs.terraform_dir }}
       OUTPUT_BASTION_INFO: ${{ inputs.output_bastion_info }}
       BASTION_ACCESS: ${{ inputs.bastion_access }}
@@ -147,7 +148,7 @@ jobs:
       id: tf-output
       if: ${{ env.OUTPUT_BASTION_INFO == 'true' }}
       run: |
-        pushd ${{ env.TF_DIR }}
+        pushd ${{ env.TF_INFRA_DIR }}
         terraform init
         echo "::set-output name=bastion_name::$(terraform output -raw bastion_name)"
         echo "::set-output name=bastion_zone::$(terraform output -raw bastion_zone)"
