@@ -215,3 +215,10 @@ gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
   --role="roles/privateca.caManager" \
   --member="serviceAccount:${SERVICE_ACCOUNT}"
   
+# Adding binding is idempotent.
+# For creating redis for Rekor.
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --project="${PROJECT_ID}" \
+  --role="roles/redis.admin" \
+  --member="serviceAccount:${SERVICE_ACCOUNT}"
+

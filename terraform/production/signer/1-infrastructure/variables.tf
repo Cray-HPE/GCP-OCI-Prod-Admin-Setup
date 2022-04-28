@@ -37,6 +37,11 @@ variable "cluster_name" {
   default     = "sigstore-prod"
 }
 
+variable "cluster_network_tag" {
+  type    = string
+  default = ""
+}
+
 variable "region" {
   description = "The region in which to create the VPC network"
   type        = string
@@ -56,6 +61,14 @@ variable "tunnel_accessor_sa" {
   description = "Email of group to give access to the tunnel to"
   default     = "serviceAccount:github-actions@oci-signer-service-dev.iam.gserviceaccount.com"
 }
+
+// Storage 
+variable "attestation_bucket" {
+  type        = string
+  description = "Name of the GCS bucket to store Rekor attestations in"
+  default     = "rekor-oci-signer-service"
+}
+
 
 // Network variables
 variable "network_name" {

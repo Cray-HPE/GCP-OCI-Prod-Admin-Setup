@@ -36,7 +36,8 @@ module "cluster" {
   region     = var.region
   project_id = var.project_id
 
-  cluster_name = var.cluster_name
+  cluster_name        = var.cluster_name
+  cluster_network_tag = var.cluster_network_tag
 
   network                       = var.network_self_link
   subnetwork                    = var.subnetwork_self_link
@@ -98,6 +99,28 @@ module "fulcio" {
   // KMS
   fulcio_keyring_name = "fulcio-keyring"
   fulcio_key_name     = "fulcio-intermediate-key"
+
+  depends_on = [
+    module.cluster,
+    module.network
+  ]
+}
+
+// Rekor
+module "rekor" {
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/rekor"
+
+  region       = var.region
+  project_id   = var.project_id
+  cluster_name = var.cluster_name
+
+  // Network
+  network = var.network_self_link
+
+  // Storage
+  attestation_bucket = var.attestation_bucket
+
+  // KMS
 
   depends_on = [
     module.cluster,
