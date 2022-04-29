@@ -47,10 +47,8 @@ spec:
       default: ""
     - name: fulcio-endpoint
       description: Fulcio endpoint
-      default: "http://fulcio.fulcio-system.svc"
     - name: rekor-endpoint
       description: Rekor endpoint
-      default: "http://rekor.rekor-system.svc"
   results:
     - name: IMAGE-DIGEST
       description: Digest of the image that was created
@@ -80,19 +78,11 @@ spec:
           workspace: git-source
         - name: dependencies
           workspace: dependencies
-    - name: list-dependencies
-      runAfter:
-      - install-dependencies
-      taskRef:
-        name: list-dependencies
-      workspaces:
-        - name: dependencies
-          workspace: dependencies
     - name: source-to-image
       taskRef:
         name: ko-build-image
       runAfter:
-        - list-dependencies
+        - install-dependencies
       workspaces:
         - name: source
           workspace: dependencies
@@ -123,6 +113,8 @@ spec:
       runAfter:
         - source-to-image
       params:
+        - name: SIGSTORE_CT_LOG_PUBLIC_KEY_FILE
+          value: $(params.SIGSTORE_CT_LOG_PUBLIC_KEY_FILE)
         - name: dev.chainguard.refresher.digest
           value: $(tasks.source-to-image.results.DIGESTS)
         - name: dev.chainguard.refresher.rekor-endpoint

@@ -26,9 +26,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: go-shared-task
 spec:
+  storageClassName: regionalpd-storageclass
   resources:
     requests:
-      storage: 4Gi
+      storage: 200Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -38,9 +39,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: go-dependencies
 spec:
+  storageClassName: regionalpd-storageclass
   resources:
     requests:
-      storage: 4Gi
+      storage: 200Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -51,6 +53,7 @@ kind: PipelineRun
 metadata:
   name: go-build-pipeline-run
 spec:
+  serviceAccountName: tekton-sa
   params:
     - name: git-url
       value: "https://github.com/vaikas/spiffefulciotest.git"
@@ -59,15 +62,15 @@ spec:
     - name: MAIN_DIR
       value: "./cmd"
     - name: SIGSTORE_CT_LOG_PUBLIC_KEY_FILE
-      value: ""
+      value: "/data/ctlog-public.pem"
     - name: COSIGN_REPOSITORY
-      value: gcr.io/oci-build-service/
+      value: gcr.io/oci-tekton-service-dev/spiffefulciotest
     - name: KO_DOCKER_REPO
-      value: gcr.io/oci-build-service/
+      value: gcr.io/oci-tekton-service-dev/spiffefulciotest
     - name: fulcio-endpoint
-      value: "https://fulcio.sigstore.dev"
+      value: "http://35.184.190.155"
     - name: rekor-endpoint
-      value: "https://rekor.sigstore.dev"
+      value: "http://104.154.206.234"
   pipelineRef:
     name: go-build-pipeline
   workspaces:

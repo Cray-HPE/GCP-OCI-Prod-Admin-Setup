@@ -13,14 +13,3 @@ resource "helm_release" "prometheus" {
     file("prom_values.yaml")
   ]
 }
-
-variable "PROMETHEUS_NAMESPACE" {
-  description = "Namespace to deploy prom"
-  default     = "prometheus"
-  type        = string
-}
-
-variable "PROM_HELM_CHART_VERSION" {
-  description = "Version of the Prom helm chart"
-  default     = "15.8.4"
-}

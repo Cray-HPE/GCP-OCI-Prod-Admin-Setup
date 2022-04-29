@@ -32,7 +32,7 @@ spec:
   params:
   - name: dev.chainguard.refresher.digest
     type: string
-  - name: dev.chainguard.refresher.target-registry
+  - name: COSIGN_REPOSITORY
     type: string
     default: ""
   - name: dev.chainguard.refresher.fulcio-endpoint
@@ -60,7 +60,7 @@ spec:
       "-image", "$(params['dev.chainguard.refresher.digest'])"
     ]
   - name: publish-sbom
-    image: gcr.io/projectsigstore/cosign:v1.5.1
+    image: gcr.io/projectsigstore/cosign:v1.8.0
     args: [
       "attach", "sbom",
       # Use workload identity to access images
