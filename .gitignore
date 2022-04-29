@@ -39,3 +39,7 @@ override.tf.json
 
 # Helm charts
 helm/**/charts/
+/scripts/tekton/common/tekon
+/scripts/tekton/common/test
+/scripts/tekton/common/image.trivy
+/scripts/tekton/common/ctlog-public.pem
