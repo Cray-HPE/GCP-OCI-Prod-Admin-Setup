@@ -45,7 +45,7 @@ spec:
     default: "https://rekor.sigstore.dev"
   steps:
   - name: sign
-    image: gcr.io/projectsigstore/cosign:v1.5.1
+    image: gcr.io/projectsigstore/cosign:v1.8.0
     timeout: 2m
     args: [
       "sign",

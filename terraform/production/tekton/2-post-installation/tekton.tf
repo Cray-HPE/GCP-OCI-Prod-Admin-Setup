@@ -69,63 +69,55 @@ resource "helm_release" "tekton_chains" {
   }
 }
 
-
-variable "REKOR_ADDRESS" {
-  default     = "https://rekor.sigstore.dev"
-  description = "URL for rekor"
-  type        = string
+resource "kubernetes_secret" "ctlog-public-key" {
+  metadata {
+    name      = "ctlog-public-key"
+    namespace = "default"
+  }
+  data = {
+    public = file("${path.module}/ctlog-public.pem")
+  }
 }
 
-variable "FULCIO_ADDRESS" {
-  default     = "https://fulcio.sigstore.dev/"
-  description = "URL for fulcio"
-  type        = string
+resource "kubernetes_secret" "SIGSTORE_ROOT_FILE" {
+  metadata {
+    name      = "fulcio-cert"
+    namespace = "default"
+  }
+  data = {
+    public = file("${path.module}/cert.pem")
+  }
 }
 
-variable "TK_PIPELINE_HELM_CHART_VERSION" {
-  default     = "0.2.2"
-  type        = string
-  description = "Helm chart version of tekton pipeline helm chart"
+resource "kubernetes_service_account" "tekton" {
+  metadata {
+    name =  var.tekton_sa_name
+    namespace = "default"
+    annotations = {
+      "iam.gke.io/gcp-service-account" = google_service_account.tekton_gsa.email
+    }
+  }
 }
 
-variable "TK_PIPELINE_NAMESPACE" {
-  default     = "tekton-pipelines"
-  type        = string
-  description = "Namespace to deploy tekton charts"
+# Services account for GKE workloads, fulcio etc.
+resource "google_service_account" "tekton_gsa" {
+  account_id   = var.tekton_sa_name
+  display_name = "GKE Service Account Workload user for Tekton"
+  project      = var.project_id
 }
 
-variable "TK_PIPELINE_HELM_REPO" {
-  type        = string
-  description = "tekton pipeline helm chart"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
+# Allow the workload KSA to assume GSA
+resource "google_service_account_iam_member" "workload_account_iam" {
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.tekton_working_namespace}/${var.tekton_sa_name}]"
+  service_account_id = google_service_account.tekton_gsa.name
+  depends_on         = [google_service_account.tekton_gsa]
 }
 
-variable "TK_DASHBOARD_HELM_CHART_VERSION" {
-  default     = "0.2.1"
-  type        = string
-  description = "Tekton Dashboard of the helm chart to deploy"
-}
-
-variable "TK_DASHBOARD_HELM_REPO" {
-  type        = string
-  description = "tekton dashboard helm chart repo"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
-}
-
-variable "TK_CHAINS_NAMESPACE" {
-  default     = "tekton-chains"
-  type        = string
-  description = "Namespace to deploy tekton chains"
-}
-
-variable "TK_CHAINS_HELM_CHART_VERSION" {
-  default     = "0.2.4"
-  type        = string
-  description = "Helm chart version of tekton chains to deploy"
-}
-
-variable "TK_CHAINS_HELM_REPO" {
-  type        = string
-  description = "tekton chains helm chart repo"
-  default     = "https://chainguard-dev.github.io/tekton-helm-charts"
+# GSA Access to storage for repo
+resource "google_project_iam_member" "storage_admin_member" {
+  project    = var.project_id
+  role       = "roles/storage.admin"
+  member     = "serviceAccount:${google_service_account.tekton_gsa.email}"
+  depends_on = [google_service_account.tekton_gsa]
 }
