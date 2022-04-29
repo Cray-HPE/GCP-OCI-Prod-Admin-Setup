@@ -115,6 +115,8 @@ spec:
       params:
         - name: SIGSTORE_CT_LOG_PUBLIC_KEY_FILE
           value: $(params.SIGSTORE_CT_LOG_PUBLIC_KEY_FILE)
+        - name:  dev.chainguard.refresher.target-registry
+          value: $(params.COSIGN_REPOSITORY)
         - name: dev.chainguard.refresher.digest
           value: $(tasks.source-to-image.results.DIGESTS)
         - name: dev.chainguard.refresher.rekor-endpoint

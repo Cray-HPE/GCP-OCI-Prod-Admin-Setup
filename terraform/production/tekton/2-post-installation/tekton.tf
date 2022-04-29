@@ -89,6 +89,16 @@ resource "kubernetes_secret" "SIGSTORE_ROOT_FILE" {
   }
 }
 
+resource "kubernetes_secret" "rekor_key" {
+  metadata {
+    name      = "rekor.pub"
+    namespace = "default"
+  }
+  data = {
+    public = file("${path.module}/rekor.pub")
+  }
+}
+
 resource "kubernetes_service_account" "tekton" {
   metadata {
     name      = var.tekton_sa_name
@@ -118,6 +128,13 @@ resource "google_service_account_iam_member" "workload_account_iam" {
 resource "google_project_iam_member" "storage_admin_member" {
   project    = var.project_id
   role       = "roles/storage.admin"
+  member     = "serviceAccount:${google_service_account.tekton_gsa.email}"
+  depends_on = [google_service_account.tekton_gsa]
+}
+
+resource "google_project_iam_member" "token_creation" {
+  project    = var.project_id
+  role       = "roles/iam.serviceAccountTokenCreator"
   member     = "serviceAccount:${google_service_account.tekton_gsa.email}"
   depends_on = [google_service_account.tekton_gsa]
 }
