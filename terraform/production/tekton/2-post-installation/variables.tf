@@ -35,12 +35,12 @@ variable "github_repo" {
 }
 
 variable "tekton_sa_name" {
-  default = "tekton-sa"
+  default     = "tekton-sa"
   description = "Name of the service accounts in GCP/GKE and k8s"
 }
 
 variable "tekton_working_namespace" {
-  default = "default"
+  default     = "default"
   description = "Namespace where tekton workloads are running"
 }
 

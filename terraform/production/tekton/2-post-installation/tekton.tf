@@ -91,7 +91,7 @@ resource "kubernetes_secret" "SIGSTORE_ROOT_FILE" {
 
 resource "kubernetes_service_account" "tekton" {
   metadata {
-    name =  var.tekton_sa_name
+    name      = var.tekton_sa_name
     namespace = "default"
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.tekton_gsa.email
