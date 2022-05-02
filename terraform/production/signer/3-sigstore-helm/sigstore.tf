@@ -142,6 +142,11 @@ resource "helm_release" "fulcio" {
             "ClientID": "sigstore",
             "Type": "email"
           },
+          "https://oidc.priya-chainguard.dev": {
+            "IssuerURL": "https://oidc.priya-chainguard.dev",
+            "ClientID": "sigstore",
+            "Type": "spiffe"
+          },
           "https://oauth2.sigstore.dev/auth": {
             "IssuerURL": "https://oauth2.sigstore.dev/auth",
             "ClientID": "sigstore",
@@ -240,6 +245,10 @@ resource "helm_release" "rekor" {
       enabled: false
       hostname: "10.213.1.4"
     server:
+      image:
+        # TODO: Remove once the fix in Rekor has been merged and released: https://github.com/sigstore/rekor/pull/800
+        repository: oci-signer-service-dev/rekor-server
+        version: sha256:dc42c1ece2670594275748705a393b04ac8d8e58b85cd16958dd936d2774689a
       attestation_storage:
         bucket: "gs://rekor-oci-signer-service"
         enabled: true
