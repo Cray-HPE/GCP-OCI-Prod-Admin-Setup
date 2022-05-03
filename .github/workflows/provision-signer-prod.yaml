@@ -90,6 +90,8 @@ jobs:
       workload_identity_provider: projects/971906658945/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-signer-service-dev.iam.gserviceaccount.com
       terraform_dir: terraform/production/signer/3-sigstore-helm
+      terraform_infra_dir: terraform/production/signer/1-infrastructure
       bastion_access: 'true'
       bastion_name: ${{ needs.post-installation-tf.outputs.bastion_name }}
       bastion_zone: ${{ needs.post-installation-tf.outputs.bastion_zone }}
+      output_bastion_info: 'true'
