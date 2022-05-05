@@ -142,8 +142,8 @@ resource "helm_release" "fulcio" {
             "ClientID": "sigstore",
             "Type": "email"
           },
-          "https://oidc.priya-chainguard.dev": {
-            "IssuerURL": "https://oidc.priya-chainguard.dev",
+          "https://oidc2.priya-chainguard.dev": {
+            "IssuerURL": "https://oidc2.priya-chainguard.dev",
             "ClientID": "sigstore",
             "Type": "spiffe"
           },
