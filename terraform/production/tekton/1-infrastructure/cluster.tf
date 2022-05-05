@@ -8,9 +8,7 @@ module "network" {
   cluster_name = var.cluster_name
 
   network_name                = var.network_name
-  network_self_link           = var.network_self_link
   subnetwork_name             = var.subnetwork_name
-  subnetwork_self_link        = var.subnetwork_self_link
   secondary_ip_range_name_pod = var.secondary_ip_range_name_pod
   secondary_ip_range_name_svc = var.secondary_ip_range_name_svc
 

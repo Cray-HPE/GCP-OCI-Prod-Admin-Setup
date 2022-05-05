@@ -9,9 +9,8 @@ module "network" {
 
   cluster_name = var.cluster_name
 
-  network_name         = var.network_name
-  subnetwork_name      = var.subnetwork_name
-  subnetwork_self_link = var.subnetwork_self_link
+  network_name    = var.network_name
+  subnetwork_name = var.subnetwork_name
 }
 
 // Bastion
@@ -21,7 +20,7 @@ module "bastion" {
   project_id         = var.project_id
   region             = var.region
   network            = var.network_name
-  subnetwork         = var.subnetwork_self_link
+  subnetwork         = var.subnetwork_name
   tunnel_accessor_sa = var.tunnel_accessor_sa
 
   depends_on = [
@@ -39,8 +38,8 @@ module "cluster" {
   cluster_name        = var.cluster_name
   cluster_network_tag = var.cluster_network_tag
 
-  network                       = var.network_self_link
-  subnetwork                    = var.subnetwork_self_link
+  network                       = var.network_name
+  subnetwork                    = var.subnetwork_name
   cluster_secondary_range_name  = var.secondary_ip_range_name_pod
   services_secondary_range_name = var.secondary_ip_range_name_svc
 
@@ -76,7 +75,7 @@ module "mysql" {
 
   cluster_name = var.cluster_name
 
-  network = var.network_self_link
+  network = format("projects/%s/global/networks/%s", var.project_id, var.network_name)
 
   depends_on = [
     module.network,
@@ -115,7 +114,7 @@ module "rekor" {
   cluster_name = var.cluster_name
 
   // Network
-  network = var.network_self_link
+  network = var.network_name
 
   // Storage
   attestation_bucket = var.attestation_bucket

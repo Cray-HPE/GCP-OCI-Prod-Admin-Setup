@@ -45,7 +45,7 @@ resource "google_compute_router" "router" {
   name    = format("%s-cloud-router", var.cluster_name)
   project = var.project_id
   region  = var.region
-  network = var.network_self_link
+  network = var.network_name
 
   bgp {
     asn = 64514
@@ -66,7 +66,7 @@ resource "google_compute_router_nat" "nat" {
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
   subnetwork {
-    name                    = var.subnetwork_self_link
+    name                    = var.subnetwork_name
     source_ip_ranges_to_nat = ["PRIMARY_IP_RANGE", "LIST_OF_SECONDARY_IP_RANGES"]
 
     secondary_ip_range_names = [
