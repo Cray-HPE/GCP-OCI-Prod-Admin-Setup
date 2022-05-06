@@ -1,0 +1,7 @@
+apiVersion: v2
+name: spire
+description: A Helm chart for Spire
+home: https://github.com/spiffe/spire-tutorials/
+type: application
+
+version: 0.0.1

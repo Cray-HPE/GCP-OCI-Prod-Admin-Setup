@@ -1,0 +1,6 @@
+# Details about the SPIRE domain
+trustDomain: "oidc2.priya-chainguard.dev"
+fullyQualifiedTrustDomain: "https://oidc2.priya-chainguard.dev"
+
+# Email for the LetsEncrypt cert
+email: "priya@chainguard.dev"
