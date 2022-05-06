@@ -41,7 +41,7 @@ PROVIDER_NAME="github-actions-provider"
 LOCATION="global"
 
 REPO="${REPO:-"Cray-HPE/GCP-OCI-Prod-Admin-Setup"}"
-SERVICE_ACCOUNT_ID="github-actions"
+SERVICE_ACCOUNT_ID="gke-shared-VPC-provision-sign"
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT_ID}@${PROJECT_ID}.iam.gserviceaccount.com"
 PROJECT_NUMBER=$(gcloud projects describe "${PROJECT_ID}" --format='value(projectNumber)')
 

@@ -74,13 +74,25 @@ variable "attestation_bucket" {
 variable "network_name" {
   type        = string
   description = "Name of the private network to set up in"
-  default     = "oci-signer-service"
+  default     = "default-network"
+}
+
+variable "network_self_link" {
+  type = string
+  description = "Network self link"
+  default = "https://www.googleapis.com/compute/v1/projects/shared-vpc-interconnect-202004/global/networks/default-network"
 }
 
 variable "subnetwork_name" {
   type        = string
   description = "Subnetwork name"
-  default     = "primary-us-central-signer"
+  default     = "sig-store"
+}
+
+variable "subnetwork_self_link" {
+  type        = string
+  description = "Subnetwork to use"
+  default     = "https://www.googleapis.com/compute/v1/projects/shared-vpc-interconnect-202004/regions/us-central1/subnetworks/sig-store"
 }
 
 variable "secondary_ip_range_name_pod" {

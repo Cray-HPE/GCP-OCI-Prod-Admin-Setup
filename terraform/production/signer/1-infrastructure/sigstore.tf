@@ -15,12 +15,12 @@ module "network" {
 
 // Bastion
 module "bastion" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion"
+  source = "../../modules/bastion"
 
   project_id         = var.project_id
   region             = var.region
-  network            = var.network_name
-  subnetwork         = var.subnetwork_name
+  network            = var.network_self_link
+  subnetwork         = var.subnetwork_self_link
   tunnel_accessor_sa = var.tunnel_accessor_sa
 
   depends_on = [
@@ -38,8 +38,9 @@ module "cluster" {
   cluster_name        = var.cluster_name
   cluster_network_tag = var.cluster_network_tag
 
-  network                       = var.network_name
-  subnetwork                    = var.subnetwork_name
+  network    = var.network_self_link
+  subnetwork = var.subnetwork_self_link
+
   cluster_secondary_range_name  = var.secondary_ip_range_name_pod
   services_secondary_range_name = var.secondary_ip_range_name_svc
 
