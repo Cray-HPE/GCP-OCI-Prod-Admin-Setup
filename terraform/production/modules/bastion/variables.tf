@@ -41,7 +41,4 @@ variable "subnetwork" {
   default     = "default"
 }
 
-variable "tunnel_accessor_sa" {
-  type        = string
-  description = "Email of group to give access to the tunnel to"
-}
+
