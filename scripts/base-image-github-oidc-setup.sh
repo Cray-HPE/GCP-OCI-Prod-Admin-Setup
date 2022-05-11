@@ -37,7 +37,7 @@ set -o xtrace
 
 PROJECT_ID="${PROJECT_ID:-oci-tekton-service-dev}"
 POOL_NAME="github-actions-pool"
-PROVIDER_NAME="github-actions-provider"
+PROVIDER_NAME="chainguard-base-images-provider"
 LOCATION="global"
 
 REPO="${REPO:-"chainguard-dev/hpe-images"}"
@@ -58,7 +58,7 @@ if ! (gcloud iam workload-identity-pools providers describe "${PROVIDER_NAME}" -
   --project="${PROJECT_ID}" \
   --location="${LOCATION}" \
   --workload-identity-pool="${POOL_NAME}" \
-  --display-name="Github Actions Provider" \
+  --display-name="Chainguard Images Provider" \
   --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud,attribute.repository=assertion.repository" \
   --issuer-uri="https://token.actions.githubusercontent.com"
 fi
