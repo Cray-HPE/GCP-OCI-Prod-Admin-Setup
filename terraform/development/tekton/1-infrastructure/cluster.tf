@@ -46,8 +46,8 @@ module "cluster" {
   network                       = module.network.network_name
   subnetwork                    = module.network.subnetwork_self_link
   master_ipv4_cidr_block        = var.master_ipv4_cidr_block
-  cluster_secondary_range_name  = var.secondary_ip_range_name_pod
-  services_secondary_range_name = var.secondary_ip_range_name_svc
+  cluster_secondary_range_name  = module.network.secondary_ip_range.0.range_name
+  services_secondary_range_name = module.network.secondary_ip_range.1.range_name
 
   bastion_ip_address = module.bastion.ip_address
 
