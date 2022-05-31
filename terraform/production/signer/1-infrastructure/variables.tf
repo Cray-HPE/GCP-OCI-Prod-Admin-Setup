@@ -30,12 +30,30 @@ variable "monitoring" {
   }
 }
 
+// Cluster variables
 // Optional values that can be overridden or appended to if desired.
 variable "cluster_name" {
   description = "The name to give the new Kubernetes cluster."
   type        = string
   default     = "sigstore-prod"
 }
+
+variable "cluster_zone" {
+  description = "The zone to create the k8s cluster in."
+  type        = string
+  default     = "us-central1-a"
+}
+
+variable "autoscaling_min_node" {
+  type    = number
+  default = 3
+}
+
+variable "autoscaling_max_node" {
+  type    = number
+  default = 5
+}
+
 
 variable "cluster_network_tag" {
   type    = string
