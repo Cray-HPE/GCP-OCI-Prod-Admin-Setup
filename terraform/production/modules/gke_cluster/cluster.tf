@@ -62,7 +62,7 @@ resource "google_container_cluster" "cluster" {
   datapath_provider = var.datapath_provider
 
   name     = var.cluster_name
-  location = var.region
+  location = var.cluster_zone
   project  = var.project_id
 
   release_channel {

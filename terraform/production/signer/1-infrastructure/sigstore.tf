@@ -29,8 +29,9 @@ module "cluster" {
   source = "../../modules/gke_cluster"
 
   // Specifying a zone will create a zonal cluster instead of a regional one
-  region     = var.cluster_zone
-  project_id = var.project_id
+  region       = var.region
+  cluster_zone = var.cluster_zone
+  project_id   = var.project_id
 
   cluster_name        = var.cluster_name
   cluster_network_tag = var.cluster_network_tag
@@ -43,7 +44,7 @@ module "cluster" {
   autoscaling_min_node = var.autoscaling_min_node
   autoscaling_max_node = var.autoscaling_max_node
 
-  database_encryption_state = var.database_encryption_state
+  database_encryption_state    = var.database_encryption_state
   database_encryption_key_name = var.database_encryption_key_name
 
   bastion_ip_address = module.bastion.ip_address
