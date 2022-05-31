@@ -18,6 +18,12 @@ variable "cluster_name" {
   default     = "sigstore-prod"
 }
 
+variable "cluster_zone" {
+  description = "The Kubernetes cluster zone."
+  type        = string
+  default     = "us-central1-a"
+}
+
 variable "github_repo" {
   description = "Github repo for running Github Actions from."
   type        = string
