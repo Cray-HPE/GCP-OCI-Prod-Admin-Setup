@@ -60,6 +60,19 @@ variable "cluster_network_tag" {
   default = ""
 }
 
+// CLUSTER DATABASE ENCRYPTION
+
+variable "database_encryption_state" {
+  type    = string
+  default = "ENCRYPTED"
+}
+
+variable "database_encryption_key_name" {
+  type    = string
+  default = "projects/oci-signer-service-dev/locations/global/keyRings/gke-secrets/cryptoKeys/GKE-Shared-Cluster"
+}
+
+
 variable "region" {
   description = "The region in which to create the VPC network"
   type        = string
