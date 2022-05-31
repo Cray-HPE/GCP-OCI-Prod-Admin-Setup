@@ -1,3 +1,4 @@
+/*
 resource "helm_release" "prometheus" {
   name             = "prometheus"
   chart            = "prometheus"
@@ -13,3 +14,4 @@ resource "helm_release" "prometheus" {
     file("prom_values.yaml")
   ]
 }
+*/

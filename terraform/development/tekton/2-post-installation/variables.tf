@@ -47,7 +47,7 @@ variable "FULCIO_ADDRESS" {
 }
 
 variable "TK_PIPELINE_HELM_CHART_VERSION" {
-  default     = "0.2.2"
+  default     = "0.2.3"
   type        = string
   description = "Helm chart version of tekton pipeline helm chart"
 }
@@ -94,8 +94,6 @@ variable "TK_CHAINS_HELM_REPO" {
   default     = "https://chainguard-dev.github.io/tekton-helm-charts"
 }
 
-
-
 variable "PROMETHEUS_NAMESPACE" {
   description = "Namespace to deploy prom"
   default     = "prometheus"
@@ -104,7 +102,7 @@ variable "PROMETHEUS_NAMESPACE" {
 
 variable "PROM_HELM_CHART_VERSION" {
   description = "Version of the Prom helm chart"
-  default     = "15.8.4"
+  default     = "15.8.7"
 }
 
 
