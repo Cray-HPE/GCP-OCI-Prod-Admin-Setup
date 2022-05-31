@@ -1,30 +1,20 @@
-// Private network
-module "network" {
-  source = "../../modules/network"
-
-  region     = var.region
-  project_id = var.project_id
-
-  cluster_name = var.cluster_name
-
-  network_name                = var.network_name
-  subnetwork_name             = var.subnetwork_name
-  secondary_ip_range_name_pod = var.secondary_ip_range_name_pod
-  secondary_ip_range_name_svc = var.secondary_ip_range_name_svc
-
-}
-
-data "google_compute_network" "primary" {
-  name = var.network_name
-}
-
-data "google_compute_subnetwork" "sub" {
-  name = var.subnetwork_name
-}
-
 resource "google_container_registry" "registry" {
   project  = var.project_id
   location = "US"
+}
+
+
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+// Private network
+module "network" {
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network"
+
+  region       = var.region
+  project_id   = var.project_id
+  cluster_name = var.cluster_name
 }
 
 // Bastion
@@ -33,13 +23,12 @@ module "bastion" {
 
   project_id         = var.project_id
   region             = var.region
-  network            = data.google_compute_network.primary.name
-  subnetwork         = var.subnetwork_name
+  network            = module.network.network_name
+  subnetwork         = module.network.subnetwork_self_link
   tunnel_accessor_sa = var.tunnel_accessor_sa
-}
-
-locals {
-  cluster_name = "${var.cluster_name}-${var.env}"
+  depends_on = [
+    module.network
+  ]
 }
 
 module "cluster" {
@@ -48,24 +37,26 @@ module "cluster" {
 
   region               = var.region
   project_id           = var.project_id
-  node_pool_name       = local.cluster_name
-  cluster_name         = local.cluster_name
+  node_pool_name       = var.cluster_name
+  cluster_name         = var.cluster_name
   initial_node_count   = 3
   autoscaling_min_node = 3
   autoscaling_max_node = 10
 
-  network                       = data.google_compute_network.primary.name
-  subnetwork                    = var.subnetwork_name
+  network                       = module.network.network_name
+  subnetwork                    = module.network.subnetwork_self_link
   master_ipv4_cidr_block        = var.master_ipv4_cidr_block
-  cluster_secondary_range_name  = var.secondary_ip_range_name_pod
-  services_secondary_range_name = var.secondary_ip_range_name_svc
+  cluster_secondary_range_name  = module.network.secondary_ip_range.0.range_name
+  services_secondary_range_name = module.network.secondary_ip_range.1.range_name
 
   bastion_ip_address = module.bastion.ip_address
 
   depends_on = [
-    module.bastion
+    module.bastion,
+    module.network
   ]
 }
+
 resource "random_id" "suffix" {
   byte_length = 4
 }
@@ -77,10 +68,11 @@ variable "master_ipv4_cidr_block" {
 
 //needed till https://github.com/sigstore/scaffolding/pull/123/files is merged
 resource "google_compute_firewall" "master-webhooks" {
-  name    = "gke-${local.cluster_name}-webhooks-${random_id.suffix.hex}"
+  name    = "gke-${var.cluster_name}-webhooks-${random_id.suffix.hex}"
   project = var.project_id
 
-  network   = data.google_compute_network.primary.name
+  network = module.network.network_name
+
   direction = "INGRESS"
 
 
@@ -90,8 +82,6 @@ resource "google_compute_firewall" "master-webhooks" {
     protocol = "tcp"
     ports    = ["8443"]
   }
-
-  //target_tags = [local.cluster_network_tag]
 
   depends_on = [module.cluster]
 }
@@ -104,6 +94,6 @@ module "policy_bindings" {
   region     = var.region
   project_id = var.project_id
 
-  cluster_name = local.cluster_name
+  cluster_name = var.cluster_name
   github_repo  = var.github_repo
 }

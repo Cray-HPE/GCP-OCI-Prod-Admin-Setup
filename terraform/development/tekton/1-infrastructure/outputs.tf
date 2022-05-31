@@ -1,23 +1,4 @@
-// Network outputs
-
-output "network_name" {
-  value = data.google_compute_network.primary.name
-}
-
-output "network_self_link" {
-  value = data.google_compute_network.primary.self_link
-}
-
-output "subnetwork_self_link" {
-  value = data.google_compute_network.primary.subnetworks_self_links
-}
-
-/*output "secondary_ip_range" {
-  value = module.network.secondary_ip_range
-}*/
-
 // Bastion outputs
-
 output "ssh_cmd" {
   description = "Instructions to connect to bastion"
   value       = "gcloud compute ssh --zone ${module.bastion.zone} ${module.bastion.name} --tunnel-through-iap --project ${module.bastion.project}"
@@ -51,7 +32,6 @@ output "bastion_kubectl" {
 }
 
 // Cluster outputs
-
 output "cluster_name" {
   description = "Convenience output to obtain the GKE Cluster name"
   value       = module.cluster.cluster_name

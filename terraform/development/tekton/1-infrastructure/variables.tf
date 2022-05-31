@@ -1,27 +1,14 @@
 variable "network_name" {
-  default     = "oci-build-service"
+  default     = "tekton-ci-network"
   type        = string
   description = "Name of the network to deploy too"
 }
 
 variable "subnetwork_name" {
-  default     = "primary-us-central-builder"
+  default     = "tekton-ci-subnet"
   type        = string
   description = "Name of the subnetwork to deploy too"
 }
-
-variable "secondary_ip_range_name_pod" {
-  type        = string
-  description = "IP range for pods"
-  default     = "pod-range"
-}
-
-variable "secondary_ip_range_name_svc" {
-  type        = string
-  description = "IP range for services"
-  default     = "svc-range"
-}
-
 
 variable "project_id" {
   type = string
@@ -30,20 +17,6 @@ variable "project_id" {
     error_message = "Must specify project_id variable."
   }
 }
-
-variable "network_self_link" {
-  type    = string
-  default = "https://www.googleapis.com/compute/v1/projects/oci-tekton-service-dev/global/networks/oci-build-service"
-}
-
-
-variable "subnetwork_self_link" {
-  type        = string
-  description = "Subnetwork to use"
-  default     = "https://www.googleapis.com/compute/v1/projects/oci-tekton-service-dev/regions/us-central1/subnetworks/primary-us-central-builder"
-}
-
-
 
 // Optional values that can be overridden or appended to if desired.
 variable "cluster_name" {

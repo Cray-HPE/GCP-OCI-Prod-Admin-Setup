@@ -12,5 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-project_id = "oci-tekton-service-dev"
-region     = "us-central1"
+project_id   = "oci-tekton-service-dev"
+region       = "us-central1"
+cluster_name = "oci-tekton-service-gke-dev"
