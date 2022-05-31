@@ -2,7 +2,7 @@ data "google_client_config" "current" {
 }
 
 data "google_container_cluster" "tekton_prod" {
-  name     = local.cluster_name
+  name     = var.cluster_name
   project  = var.project_id
   location = var.region
 }
