@@ -18,7 +18,7 @@
 
 resource "google_container_node_pool" "cluster_nodes" {
   name     = var.node_pool_name
-  location = var.region
+  location = var.cluster_zone
   cluster  = google_container_cluster.cluster.name
   project  = var.project_id
 

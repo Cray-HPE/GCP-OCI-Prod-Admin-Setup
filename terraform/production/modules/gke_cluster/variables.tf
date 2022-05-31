@@ -28,7 +28,13 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "GCP region"
-  default     = "us-west1"
+  default     = "us-central1"
+}
+
+variable "cluster_zone" {
+  description = "The zone to create the k8s cluster in."
+  type        = string
+  default     = "us-central1-a"
 }
 
 variable "labels" {
