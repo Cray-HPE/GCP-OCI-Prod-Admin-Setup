@@ -29,7 +29,8 @@ module "cluster" {
   // The double slash '//' syntax represents the submodule in the git directory
   source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/gke_cluster"
 
-  region     = var.region
+  // Specifying a zone will create a zonal cluster instead of a regional one
+  region     = var.cluster_zone
   project_id = var.project_id
 
   cluster_name        = var.cluster_name
@@ -39,6 +40,9 @@ module "cluster" {
   subnetwork                    = module.network.subnetwork_self_link
   cluster_secondary_range_name  = module.network.secondary_ip_range.0.range_name
   services_secondary_range_name = module.network.secondary_ip_range.1.range_name
+
+  autoscaling_min_node = var.autoscaling_min_node
+  autoscaling_max_node = var.autoscaling_max_node
 
   bastion_ip_address = module.bastion.ip_address
 
