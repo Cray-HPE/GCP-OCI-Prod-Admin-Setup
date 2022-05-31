@@ -11,7 +11,7 @@ spec:
       containers:
       - name: createdb
         # This image was built via `ko publish` in the `sigstore/scaffolding` repo
-        image: gcr.io/priya-chainguard/createdb@sha256:e1ca4dc4a4e177e8f6f828bb76b5218baf72743126c610ba482309050bb27fc0
+        image: gcr.io/oci-signer-service-dev/createdb@sha256:e1ca4dc4a4e177e8f6f828bb76b5218baf72743126c610ba482309050bb27fc0
         args: [
         "--mysql_uri=$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp(localhost:3306)/",
         "--db_name=trillian"
@@ -36,7 +36,7 @@ spec:
         image: gcr.io/cloudsql-docker/gce-proxy:1.29.0
         command:
           - "/cloud_sql_proxy"
-          - "-instances=oci-signer-service-dev:us-central1:sigstore-prod-mysql-6553c6dc=tcp:3306"
+          - "-instances=oci-signer-service-dev:us-central1:sigstore-prod-mysql-992c72f2=tcp:3306"
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

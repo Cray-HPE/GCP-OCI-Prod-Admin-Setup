@@ -67,7 +67,7 @@ resource "helm_release" "trillian" {
         username: "trillian"
       gcp:
         enabled: true
-        instance: oci-signer-service-dev:us-central1:sigstore-prod-mysql-6553c6dc
+        instance: oci-signer-service-dev:us-central1:sigstore-prod-mysql-992c72f2
         cloudsql:
           version: "1.29.0"
           resources:
@@ -194,7 +194,7 @@ resource "helm_release" "rekor" {
   namespace        = "rekor-system"
   create_namespace = true
   atomic           = true
-  version          = "0.2.29"
+  version          = "0.3.0"
 
   depends_on = [
     helm_release.trillian
@@ -203,6 +203,7 @@ resource "helm_release" "rekor" {
   values = [
     <<EOF
     enabled: true
+    imagePullSecrets:
     namespace:
       name: rekor-system
       create: false
@@ -213,22 +214,18 @@ resource "helm_release" "rekor" {
         portRPC: 8090
         portHTTP: 8091
     createtree:
-      enabled: false
+      enabled: true
     redis:
       enabled: false
       hostname: "10.213.1.4"
     server:
-      image:
-        # TODO: Remove once the fix in Rekor has been merged and released: https://github.com/sigstore/rekor/pull/800
-        repository: oci-signer-service-dev/rekor-server
-        version: sha256:dc42c1ece2670594275748705a393b04ac8d8e58b85cd16958dd936d2774689a
       attestation_storage:
         bucket: "gs://rekor-oci-signer-service"
         enabled: true
         persistence:
           enabled: false
       config:
-        treeID: "8990870585810304014"
+        treeID: "4956299539128379792"
       # TODO: Remove once we aren't using a LoadBalancer
       service:
         type: LoadBalancer
@@ -259,62 +256,62 @@ resource "helm_release" "rekor" {
   ]
 }
 
-resource "helm_release" "ctlog" {
-  name             = "ctlog"
-  repository       = "https://sigstore.github.io/helm-charts"
-  chart            = "ctlog"
-  namespace        = "ctlog-system"
-  create_namespace = false
-  atomic           = false
-  version          = "0.2.12"
+# resource "helm_release" "ctlog" {
+#   name             = "ctlog"
+#   repository       = "https://sigstore.github.io/helm-charts"
+#   chart            = "ctlog"
+#   namespace        = "ctlog-system"
+#   create_namespace = false
+#   atomic           = false
+#   version          = "0.2.12"
 
-  depends_on = [
-    helm_release.fulcio,
-    kubectl_manifest.ctlog_priv_key_external_secret
-  ]
+#   depends_on = [
+#     helm_release.fulcio,
+#     kubectl_manifest.ctlog_priv_key_external_secret
+#   ]
 
-  values = [
-    <<EOF
-    enabled: true
-    namespace:
-      name: ctlog-system
-      create: false
-    forceNamespace: ctlog-system
-    fullnameOverride: ctlog
-    createcerts:
-      # Certs are stored in GCP Secret Manager
-      enabled: false
-    createtree:
-      # Tree ID is stored in GCP Secret Manager
-      enabled: false
-    createctconfig:
-      # All relevant data for the CT Log config is stored in GCP Secret Manager
-      # The config is created in `ctlog_config.tf`
-      enabled: false
-    server:
-      replicaCount: 3
-      config:
-        secret:
-          enabled: true
-          name: ctlog-config
-      podAnnotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "6963"
-      ingress:
-        # TODO: (priyawadhwa) enable ingress
-        enabled: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65533
-      resources:
-        requests:
-          memory: "1G"
-          cpu: "0.5"
-    trillian:
-      logServer:
-        portRPC: 8090
-        portHTTP: 8091
-    EOF
-  ]
-}
+#   values = [
+#     <<EOF
+#     enabled: true
+#     namespace:
+#       name: ctlog-system
+#       create: false
+#     forceNamespace: ctlog-system
+#     fullnameOverride: ctlog
+#     createcerts:
+#       # Certs are stored in GCP Secret Manager
+#       enabled: false
+#     createtree:
+#       # Tree ID is stored in GCP Secret Manager
+#       enabled: false
+#     createctconfig:
+#       # All relevant data for the CT Log config is stored in GCP Secret Manager
+#       # The config is created in `ctlog_config.tf`
+#       enabled: false
+#     server:
+#       replicaCount: 3
+#       config:
+#         secret:
+#           enabled: true
+#           name: ctlog-config
+#       podAnnotations:
+#         prometheus.io/scrape: "true"
+#         prometheus.io/path: "/metrics"
+#         prometheus.io/port: "6963"
+#       ingress:
+#         # TODO: (priyawadhwa) enable ingress
+#         enabled: false
+#       securityContext:
+#         runAsNonRoot: true
+#         runAsUser: 65533
+#       resources:
+#         requests:
+#           memory: "1G"
+#           cpu: "0.5"
+#     trillian:
+#       logServer:
+#         portRPC: 8090
+#         portHTTP: 8091
+#     EOF
+#   ]
+# }
