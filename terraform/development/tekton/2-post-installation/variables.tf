@@ -6,16 +6,6 @@ variable "project_id" {
   }
 }
 
-variable "env" {
-  description = "environment for deployment"
-  type        = string
-  default     = "dev"
-}
-
-locals {
-  cluster_name = "${var.cluster_name}-${var.env}"
-}
-
 variable "region" {
   description = "The region in which to create the VPC network"
   type        = string
@@ -43,8 +33,6 @@ variable "tekton_working_namespace" {
   default     = "default"
   description = "Namespace where tekton workloads are running"
 }
-
-
 
 variable "REKOR_ADDRESS" {
   default     = "http://104.154.206.234"
