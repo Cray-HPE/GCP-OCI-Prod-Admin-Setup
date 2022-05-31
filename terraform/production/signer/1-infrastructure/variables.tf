@@ -68,29 +68,3 @@ variable "attestation_bucket" {
   description = "Name of the GCS bucket to store Rekor attestations in"
   default     = "rekor-oci-signer-service"
 }
-
-
-// Network variables
-variable "network_name" {
-  type        = string
-  description = "Name of the private network to set up in"
-  default     = "oci-signer-service"
-}
-
-variable "subnetwork_name" {
-  type        = string
-  description = "Subnetwork name"
-  default     = "primary-us-central-signer"
-}
-
-variable "secondary_ip_range_name_pod" {
-  type        = string
-  description = "IP range for pods"
-  default     = "sigstore-prod-pod-range"
-}
-
-variable "secondary_ip_range_name_svc" {
-  type        = string
-  description = "IP range for services"
-  default     = "sigstore-prod-svc-range"
-}

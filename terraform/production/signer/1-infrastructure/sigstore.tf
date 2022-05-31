@@ -2,15 +2,12 @@
 
 // Private network
 module "network" {
-  source = "../../modules/network"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network"
 
   region     = var.region
   project_id = var.project_id
 
   cluster_name = var.cluster_name
-
-  network_name    = var.network_name
-  subnetwork_name = var.subnetwork_name
 }
 
 // Bastion
@@ -19,8 +16,8 @@ module "bastion" {
 
   project_id         = var.project_id
   region             = var.region
-  network            = var.network_name
-  subnetwork         = var.subnetwork_name
+  network            = module.network.network_name
+  subnetwork         = module.network.subnetwork_self_link
   tunnel_accessor_sa = var.tunnel_accessor_sa
 
   depends_on = [
@@ -38,10 +35,10 @@ module "cluster" {
   cluster_name        = var.cluster_name
   cluster_network_tag = var.cluster_network_tag
 
-  network                       = var.network_name
-  subnetwork                    = var.subnetwork_name
-  cluster_secondary_range_name  = var.secondary_ip_range_name_pod
-  services_secondary_range_name = var.secondary_ip_range_name_svc
+  network                       = module.network.network_self_link
+  subnetwork                    = module.network.subnetwork_self_link
+  cluster_secondary_range_name  = module.network.secondary_ip_range.0.range_name
+  services_secondary_range_name = module.network.secondary_ip_range.1.range_name
 
   bastion_ip_address = module.bastion.ip_address
 
@@ -75,7 +72,7 @@ module "mysql" {
 
   cluster_name = var.cluster_name
 
-  network = format("projects/%s/global/networks/%s", var.project_id, var.network_name)
+  network = module.network.network_self_link
 
   depends_on = [
     module.network,
@@ -114,7 +111,7 @@ module "rekor" {
   cluster_name = var.cluster_name
 
   // Network
-  network = var.network_name
+  network = module.network.network_name
 
   // Storage
   attestation_bucket = var.attestation_bucket
