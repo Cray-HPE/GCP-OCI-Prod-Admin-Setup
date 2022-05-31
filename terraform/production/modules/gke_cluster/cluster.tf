@@ -23,6 +23,7 @@ resource "google_project_service" "service" {
     "compute.googleapis.com",              // For Node Pool, roles/compute.instanceAdmin
     "container.googleapis.com",            // For GKE cluster. roles/container.admin
     "iam.googleapis.com",                  // For creating service accounts and access control. roles/iam.serviceAccountAdmin, roles/iam.serviceAccountUser
+    "cloudkms.googleapis.com",             // For database encryption for the cluster
   ])
   project = var.project_id
   service = each.key
@@ -32,6 +33,29 @@ resource "google_project_service" "service" {
   // underlying resources.
   disable_on_destroy = false
 }
+
+// CLUSTER KMS
+resource "google_kms_key_ring" "cluster_db_encryption_keyring" {
+  name       = var.cluster_db_encryption_keyring
+  location   = var.region
+  project    = var.project_id
+  depends_on = [google_project_service.service]
+}
+
+resource "google_kms_crypto_key" "cluster_db_encryption_key" {
+  name     = var.cluster_db_encryption_key
+  key_ring = google_kms_key_ring.cluster_db_encryption_keyring.id
+  purpose  = "ENCRYPT_DECRYPT"
+  version_template {
+    algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+    protection_level = "HSM"
+  }
+
+  depends_on = [google_kms_key_ring.cluster_db_encryption_keyring]
+}
+
+
+// GKE CLUSTER
 
 resource "google_container_cluster" "cluster" {
   # This is where to enable Dataplane v2.
@@ -123,10 +147,13 @@ resource "google_container_cluster" "cluster" {
 
   database_encryption {
     state    = var.database_encryption_state
-    key_name = var.database_encryption_key_name
+    key_name = google_kms_crypto_key.cluster_db_encryption_key.id
   }
 
-  depends_on = [google_project_service.service]
+  depends_on = [
+    google_project_service.service,
+    google_kms_crypto_key.cluster_db_encryption_key
+  ]
 }
 
 resource "random_id" "suffix" {
