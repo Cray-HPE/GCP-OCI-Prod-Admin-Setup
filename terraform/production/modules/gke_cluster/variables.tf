@@ -211,11 +211,20 @@ variable "workload_metadata_config_mode" {
 }
 
 // DATABASE ENCRYPTION
+variable "cluster_db_encryption_keyring" {
+  type    = string
+  default = "gke-encryption"
+}
+
+variable "cluster_db_encryption_key" {
+  type    = string
+  default = "db-encryption-key"
+}
 
 variable "database_encryption_state" {
-  type    = string
-} 
+  type = string
+}
 
 variable "database_encryption_key_name" {
-  type    = string
-} 
+  type = string
+}
