@@ -216,8 +216,8 @@ resource "helm_release" "rekor" {
     createtree:
       enabled: true
     redis:
-      enabled: false
-      hostname: "10.213.1.4"
+      enabled: true
+      hostname: "10.127.0.4"
     server:
       attestation_storage:
         bucket: "gs://rekor-oci-signer-service"
