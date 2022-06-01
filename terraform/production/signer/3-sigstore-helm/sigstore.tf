@@ -256,62 +256,62 @@ resource "helm_release" "rekor" {
   ]
 }
 
-# resource "helm_release" "ctlog" {
-#   name             = "ctlog"
-#   repository       = "https://sigstore.github.io/helm-charts"
-#   chart            = "ctlog"
-#   namespace        = "ctlog-system"
-#   create_namespace = false
-#   atomic           = false
-#   version          = "0.2.12"
+resource "helm_release" "ctlog" {
+  name             = "ctlog"
+  repository       = "https://sigstore.github.io/helm-charts"
+  chart            = "ctlog"
+  namespace        = "ctlog-system"
+  create_namespace = false
+  atomic           = false
+  version          = "0.2.12"
 
-#   depends_on = [
-#     helm_release.fulcio,
-#     kubectl_manifest.ctlog_priv_key_external_secret
-#   ]
+  depends_on = [
+    helm_release.fulcio,
+    kubectl_manifest.ctlog_priv_key_external_secret
+  ]
 
-#   values = [
-#     <<EOF
-#     enabled: true
-#     namespace:
-#       name: ctlog-system
-#       create: false
-#     forceNamespace: ctlog-system
-#     fullnameOverride: ctlog
-#     createcerts:
-#       # Certs are stored in GCP Secret Manager
-#       enabled: false
-#     createtree:
-#       # Tree ID is stored in GCP Secret Manager
-#       enabled: false
-#     createctconfig:
-#       # All relevant data for the CT Log config is stored in GCP Secret Manager
-#       # The config is created in `ctlog_config.tf`
-#       enabled: false
-#     server:
-#       replicaCount: 3
-#       config:
-#         secret:
-#           enabled: true
-#           name: ctlog-config
-#       podAnnotations:
-#         prometheus.io/scrape: "true"
-#         prometheus.io/path: "/metrics"
-#         prometheus.io/port: "6963"
-#       ingress:
-#         # TODO: (priyawadhwa) enable ingress
-#         enabled: false
-#       securityContext:
-#         runAsNonRoot: true
-#         runAsUser: 65533
-#       resources:
-#         requests:
-#           memory: "1G"
-#           cpu: "0.5"
-#     trillian:
-#       logServer:
-#         portRPC: 8090
-#         portHTTP: 8091
-#     EOF
-#   ]
-# }
+  values = [
+    <<EOF
+    enabled: true
+    namespace:
+      name: ctlog-system
+      create: false
+    forceNamespace: ctlog-system
+    fullnameOverride: ctlog
+    createcerts:
+      # Certs are stored in GCP Secret Manager
+      enabled: false
+    createtree:
+      # Tree ID is also stored in GCP Secret Manager
+      enabled: true
+    createctconfig:
+      # All relevant data for the CT Log config is stored in GCP Secret Manager
+      # The config is created in `ctlog_config.tf`
+      enabled: false
+    server:
+      replicaCount: 3
+      config:
+        secret:
+          enabled: true
+          name: ctlog-config
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "6963"
+      ingress:
+        # TODO: (priyawadhwa) enable ingress
+        enabled: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
+      resources:
+        requests:
+          memory: "1G"
+          cpu: "0.5"
+    trillian:
+      logServer:
+        portRPC: 8090
+        portHTTP: 8091
+    EOF
+  ]
+}
