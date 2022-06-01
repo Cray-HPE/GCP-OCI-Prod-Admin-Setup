@@ -7,7 +7,22 @@ Fulcio URL: http://35.224.78.102
 
 Rekor URL: http://34.134.220.168
 
+
 **Signing with Cosign**
+
+
+Each piece generates keys and certificates that are needed for signing and verifying.
+
+Cosign: Requires the fulcio root cert, the ct log public key, and the rekor public key
+
+Rekor: Rekor key pair is in [GCP oci-signer-service-dev KMS](https://console.cloud.google.com/security/kms/keyring/manage/global/rekor-keyring/key?project=oci-signer-service-dev)
+
+Chains: Requires fulcio and rekor URL endpoint
+
+CTLog: CT Log public and private keys are in [GCP secrets manager](https://console.cloud.google.com/security/secret-manager/secret/ctlog-public-key/versions?project=oci-signer-service-dev)
+
+Fulcio Cert: Available in Fulcio endpoint $FULCIO_ENDPOINT/api/v1/rootCert or in the [GCP Secrets Manager](https://console.cloud.google.com/security/secret-manager/secret/fulcio-root-ca/versions?project=oci-signer-service-dev)
+
 
 We need to do some initial set up, and store the CT Log public key, Rekor public key and Fulcio Root CA on disk as files:
 
