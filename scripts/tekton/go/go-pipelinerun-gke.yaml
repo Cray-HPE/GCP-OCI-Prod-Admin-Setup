@@ -68,9 +68,9 @@ spec:
     - name: KO_DOCKER_REPO
       value: gcr.io/oci-tekton-service-dev/spiffefulciotest
     - name: fulcio-endpoint
-      value: "http://35.184.190.155"
+      value: "http://35.224.78.102"
     - name: rekor-endpoint
-      value: "http://104.154.206.234"
+      value: "http://34.134.220.168"
   pipelineRef:
     name: go-build-pipeline
   workspaces:

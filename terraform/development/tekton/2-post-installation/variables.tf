@@ -35,13 +35,13 @@ variable "tekton_working_namespace" {
 }
 
 variable "REKOR_ADDRESS" {
-  default     = "http://104.154.206.234"
+  default     = "http://34.134.220.168"
   description = "URL for rekor"
   type        = string
 }
 
 variable "FULCIO_ADDRESS" {
-  default     = "http://35.184.190.155"
+  default     = "http://35.224.78.102"
   description = "URL for fulcio"
   type        = string
 }
