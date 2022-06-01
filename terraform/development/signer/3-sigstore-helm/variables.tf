@@ -17,3 +17,8 @@ variable "cluster_name" {
   type        = string
   default     = "sigstore-prod"
 }
+
+variable "cluster_zone" {
+  type    = string
+  default = "us-central1-a"
+}

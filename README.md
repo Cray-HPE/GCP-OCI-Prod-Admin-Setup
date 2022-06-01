@@ -3,9 +3,9 @@ Terraform templates to setup up projects, networks, etc for Next Gen OCI Signing
 
 ## Fulcio and Rekor
 
-Fulcio URL: http://35.184.190.155
+Fulcio URL: http://35.224.78.102
 
-Rekor URL: http://104.154.206.234
+Rekor URL: http://34.134.220.168
 
 **Signing with Cosign**
 
@@ -61,9 +61,12 @@ Now, sign an image with cosign:
 ```
 export COSIGN_EXPERIMENTAL=1
 export SIGSTORE_CT_LOG_PUBLIC_KEY_FILE=$(pwd)/ctlog.pub
+export FULCIO_URL=http://35.224.78.102
+export REKOR_URL=http://34.134.220.168
+
 export IMAGE= [ your image]
 
-cosign sign --fulcio-url http://35.184.190.155 --rekor-url http://104.154.206.234 $IMAGE
+cosign sign --fulcio-url $FULCIO_URL --rekor-url $REKOR_URL $IMAGE
 ```
 
 **Verifying with Cosign**
@@ -73,5 +76,5 @@ export COSIGN_EXPERIMENTAL=1
 export SIGSTORE_ROOT_FILE=$(pwd)/fulcio.crt.pem
 export SIGSTORE_REKOR_PUBLIC_KEY=$(pwd)/rekor.pub 
 
-cosign verify --rekor-url http://104.154.206.234 $IMAGE
+cosign verify --rekor-url $REKOR_URL $IMAGE
 ```

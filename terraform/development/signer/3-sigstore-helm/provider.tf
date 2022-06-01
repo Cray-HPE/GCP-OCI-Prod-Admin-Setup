@@ -4,7 +4,7 @@ data "google_client_config" "current" {
 data "google_container_cluster" "sigstore_prod" {
   name     = var.cluster_name
   project  = var.project_id
-  location = var.region
+  location = var.cluster_zone
 }
 
 provider "kubernetes" {
