@@ -284,10 +284,18 @@ resource "helm_release" "ctlog" {
     createtree:
       # Tree ID is also stored in GCP Secret Manager
       enabled: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
     createctconfig:
-      # All relevant data for the CT Log config is stored in GCP Secret Manager
-      # The config is created in `ctlog_config.tf`
-      enabled: false
+      # The CT Log config was created using this Job, and is also stored in GCP Secret Manager
+      # The config is pulled from Secret Manager and created as a k8s Secret in `ctlog_config.tf`
+      enabled: true
+      fullnameOverride: ctlog-createctconfig
+      fulcioURL: http://fulcio-server.fulcio-system.svc
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65533
     server:
       replicaCount: 3
       config:
