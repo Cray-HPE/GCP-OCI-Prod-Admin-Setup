@@ -19,6 +19,6 @@ variable "cluster_name" {
 }
 
 variable "cluster_zone" {
-  type        = string
-  default     = "us-central1-a"
+  type    = string
+  default = "us-central1-a"
 }
