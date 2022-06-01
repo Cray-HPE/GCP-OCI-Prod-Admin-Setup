@@ -54,7 +54,7 @@ jobs:
       project_id: oci-tekton-service-dev
       workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
       service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
-      terraform_dir: terraform/production/tekton/1-infrastructure
+      terraform_dir: terraform/development/tekton/1-infrastructure
       output_bastion_info: 'true'
 
   post-installation-tf:
@@ -69,7 +69,7 @@ jobs:
         project_id: oci-tekton-service-dev
         workload_identity_provider: projects/558929192406/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
         service_account: github-actions@oci-tekton-service-dev.iam.gserviceaccount.com
-        terraform_dir: terraform/production/tekton/2-post-installation
+        terraform_dir: terraform/development/tekton/2-post-installation
         bastion_access: 'true'
         bastion_name: ${{ needs.infrastructure-tf.outputs.bastion_name }}
         bastion_zone: ${{ needs.infrastructure-tf.outputs.bastion_zone }}
