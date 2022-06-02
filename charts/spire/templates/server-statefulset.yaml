@@ -45,7 +45,7 @@ spec:
       shareProcessNamespace: true
       containers:
         - name: spire-server
-          image: gcr.io/spiffe-io/spire-server@sha256:fbf64ed15687c1a5141b52d46d2b9082837fd286af16fbf670d155d0ec5e3dd3 #v1.2.0
+          image: {{.Values.images.server }}
           args:
             - -config
             - /run/spire/config/server.conf

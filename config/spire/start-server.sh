@@ -37,13 +37,10 @@ PID=$!
 
 echo "Server started as process $PID"
 
-echo "Debugging ls /run/spire/sockets ..."
-ls /run/spire/sockets || echo "failed"
+echo "Sleeping 30 to give api.sock time to start up..."
 
-echo "wtf - nothing"
-echo "whoami?"
+sleep 30
 
-whoami
 
 echo "Creating registration entry for spire/spire-agent..."
 
@@ -52,18 +49,19 @@ echo "Creating registration entry for spire/spire-agent..."
     -spiffeID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
-    -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock || echo "failed"
+    -selector k8s_sat:agent_sa:spire-agent \
+    -socketPath /run/spire/sockets/api.sock || echo "Didn't create entry (don't worry, it probbly already exists)..."
+
 
 echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
 
-
-# Chains needs to be able to request an SVID
 /opt/spire/bin/spire-server entry create \
     -spiffeID spiffe://$DOMAIN/ns/tekton-chains/sa/tekton-chains-controller \
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
-    -socketPath /run/spire/sockets/api.sock  \
+    -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
-    -selector k8s:sa:tekton-chains-controller || echo "failed"
+    -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probbly already exists)..."
+
 
 wait $PID
 

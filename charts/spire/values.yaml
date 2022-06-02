@@ -28,3 +28,6 @@ loadBalancerIP: "35.232.144.34"
 
 # Email for the LetsEncrypt cert issued
 email: "pwadhwa@algol60.net"
+
+images:
+  server: gcr.io/oci-tekton-service-dev/spire-server
