@@ -105,4 +105,20 @@ variable "PROM_HELM_CHART_VERSION" {
   default     = "15.8.7"
 }
 
+variable "SPIRE_CHART_PATH" {
+  type        = string
+  description = "SPIRE Helm chart repo"
+  default     = "../../../../charts/spire"
+}
+
+variable "SPIRE_HELM_CHART_VERSION" {
+  description = "Version of the SPIRE helm chart"
+  default     = "15.8.7"
+}
+
+variable "SPIRE_NAMESPACE" {
+  default     = "spire"
+  type        = string
+  description = "Namespace to deploy SPIRE"
+}
 

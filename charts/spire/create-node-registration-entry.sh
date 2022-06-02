@@ -28,29 +28,30 @@ set -e
 bb=$(tput bold)
 nn=$(tput sgr0)
 
+DOMAIN=sig-spire.algol60.net
 
 echo "${bb}Creating registration entry for the node...${nn}"
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
     -node  \
-    -spiffeID spiffe://oidc2.priya-chainguard.dev/ns/spire/sa/spire-agent \
+    -spiffeID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
     -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock 
 
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://oidc2.priya-chainguard.dev/ns/default/sa/default \
-    -parentID spiffe://oidc2.priya-chainguard.dev/ns/spire/sa/spire-agent \
+    -spiffeID spiffe://$DOMAIN/ns/default/sa/default \
+    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s:ns:default \
-    -selector k8s:sa:default -socketPath /run/spire/sockets/api.sock
+    -selector k8s:sa:default -socketPath /run/spire/sockets/api.sock 
 
 # Test executable for making sure Spiffe is up and running and
 # connecting to Fulcio
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://oidc2.priya-chainguard.dev/ns/spire-test/sa/spire \
-    -parentID spiffe://oidc2.priya-chainguard.dev/ns/spire/sa/spire-agent \
+    -spiffeID spiffe://$DOMAIN/ns/spire-test/sa/spire \
+    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:spire-test \
     -selector k8s:sa:spire
@@ -58,8 +59,8 @@ kubectl exec -n spire spire-server-0 -- \
 # Chains connections to Fulcio
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://oidc2.priya-chainguard.dev/ns/tekton-chains/sa/tekton-chains-controller \
-    -parentID spiffe://oidc2.priya-chainguard.dev/ns/spire/sa/spire-agent \
+    -spiffeID spiffe://$DOMAIN/ns/tekton-chains/sa/tekton-chains-controller \
+    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
     -selector k8s:sa:tekton-chains-controller
