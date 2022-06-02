@@ -28,15 +28,22 @@
 
 set -e
 
-DOMAIN=sig-spire.algol60.net
+DOMAIN="sig-spire.algol60.net"
 
-echo "Running SPIRE server ..."
+echo "Running SPIRE server with domain $DOMAIN ..."
 
 /opt/spire/bin/spire-server run -config /run/spire/config/server.conf 1>>/tmp/1.log 2>&1 &
 PID=$!
 
 echo "Server started as process $PID"
 
+echo "Debugging ls /run/spire/sockets ..."
+ls /run/spire/sockets || echo "failed"
+
+echo "wtf - nothing"
+echo "whoami?"
+
+whoami
 
 echo "Creating registration entry for spire/spire-agent..."
 
@@ -45,7 +52,7 @@ echo "Creating registration entry for spire/spire-agent..."
     -spiffeID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
-    -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock 
+    -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock || echo "failed"
 
 echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
 
@@ -56,7 +63,7 @@ echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock  \
     -selector k8s:ns:tekton-chains \
-    -selector k8s:sa:tekton-chains-controller
+    -selector k8s:sa:tekton-chains-controller || echo "failed"
 
 wait $PID
 

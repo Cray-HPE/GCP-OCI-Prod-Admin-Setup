@@ -27,4 +27,9 @@ resource "helm_release" "spire" {
     name  = "loadBalancerIP"
     value = "35.232.144.34"
   }
+
+    set {
+    name  = "a"
+    value = "a"
+  }
 }

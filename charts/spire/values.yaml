@@ -24,7 +24,7 @@
 # Details about the SPIRE domain
 trustDomain: "sig-spire.algol60.net"
 fullyQualifiedTrustDomain: "https://sig-spire.algol60.net"
-loadBalancerIP: "35.194.52.103"
+loadBalancerIP: "35.232.144.34"
 
 # Email for the LetsEncrypt cert issued
 email: "pwadhwa@algol60.net"
