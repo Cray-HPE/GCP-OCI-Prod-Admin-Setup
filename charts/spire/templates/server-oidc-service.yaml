@@ -29,7 +29,7 @@ metadata:
   namespace: spire
 spec:
   type: LoadBalancer
-  # loadBalancerIP: {{ .Values.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.loadBalancerIP }}
   selector:
     app: spire-server
   ports:

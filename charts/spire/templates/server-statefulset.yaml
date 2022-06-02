@@ -86,7 +86,7 @@ spec:
           volumeMounts:
           - name: spire-server-socket
             mountPath: /run/spire/sockets
-            readOnly: false
+            readOnly: true
           - name: spire-oidc-config
             mountPath: /run/spire/oidc/config/
             readOnly: true
