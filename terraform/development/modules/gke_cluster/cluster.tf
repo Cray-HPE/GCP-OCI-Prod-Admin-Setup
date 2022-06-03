@@ -54,6 +54,20 @@ resource "google_kms_crypto_key" "cluster_db_encryption_key" {
   depends_on = [google_kms_key_ring.cluster_db_encryption_keyring]
 }
 
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+
+// IAM for encrypting with KMS
+resource "google_project_iam_member" "iam_kms_encryption" {
+  project = var.project_id
+  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member  = format("serviceAccount:service-%s@container-engine-robot.iam.gserviceaccount.com", data.google_project.project.number)
+
+  depends_on = [google_kms_crypto_key.cluster_db_encryption_key]
+}
+
 
 // GKE CLUSTER
 
@@ -152,7 +166,8 @@ resource "google_container_cluster" "cluster" {
 
   depends_on = [
     google_project_service.service,
-    google_kms_crypto_key.cluster_db_encryption_key
+    google_kms_crypto_key.cluster_db_encryption_key,
+    google_project_iam_member.iam_kms_encryption
   ]
 }
 
