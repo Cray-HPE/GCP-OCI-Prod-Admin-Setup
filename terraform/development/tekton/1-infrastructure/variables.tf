@@ -60,6 +60,12 @@ variable "region" {
   type        = string
 }
 
+variable "cluster_zone" {
+  description = "The zone in which to create the k8s cluster"
+  type        = string
+  default     = "us-central1-a"
+}
+
 variable "github_repo" {
   description = "Github repo for running Github Actions from."
   type        = string
