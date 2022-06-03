@@ -58,8 +58,8 @@ module "cluster" {
   source = "../../modules/gke_cluster"
 
   // Specifying a zone will create a zonal cluster instead of a regional one
-  region       = var.region
-  project_id   = var.project_id
+  region     = var.region
+  project_id = var.project_id
 
   cluster_name        = var.cluster_name
   cluster_network_tag = var.cluster_network_tag
