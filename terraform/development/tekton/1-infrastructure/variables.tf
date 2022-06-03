@@ -74,3 +74,32 @@ variable "tunnel_accessor_sa" {
   description = "Email of group to give access to the tunnel to"
   default     = "serviceAccount:github-actions@oci-tekton-service-dev.iam.gserviceaccount.com"
 }
+
+
+
+// CLUSTER DATABASE ENCRYPTION
+variable "database_encryption_state" {
+  type    = string
+  default = "ENCRYPTED"
+}
+
+variable "database_encryption_key_name" {
+  type    = string
+  default = "projects/oci-tekton-service-dev/locations/global/keyRings/gke-secrets/cryptoKeys/tekton-dev"
+}
+
+variable "autoscaling_min_node" {
+  type    = number
+  default = 3
+}
+
+variable "autoscaling_max_node" {
+  type    = number
+  default = 5
+}
+
+
+variable "cluster_network_tag" {
+  type    = string
+  default = ""
+}
