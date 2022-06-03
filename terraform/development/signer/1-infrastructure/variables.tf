@@ -6,6 +6,11 @@ variable "project_id" {
   }
 }
 
+variable "project_number" {
+  type        = number
+  description = "Project number associated with project_id"
+}
+
 variable "ca_pool_name" {
   description = "Certificate authority pool name"
   type        = string
