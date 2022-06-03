@@ -33,7 +33,7 @@ output "cluster_ca_certificate" {
 
 output "get_credentials" {
   description = "Gcloud get-credentials command"
-  value       = format("gcloud container clusters get-credentials --project %s --region %s --internal-ip %s", var.project_id, var.region, google_container_cluster.cluster.name)
+  value       = format("gcloud container clusters get-credentials --project %s --region %s --internal-ip %s", var.project_id, var.cluster_zone, google_container_cluster.cluster.name)
 }
 
 output "gke_sa_email" {
