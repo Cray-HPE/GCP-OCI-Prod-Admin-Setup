@@ -42,6 +42,11 @@ variable "project_id" {
   }
 }
 
+variable "project_number" {
+  type        = number
+  description = "Project number associated with project_id"
+}
+
 // Optional values that can be overridden or appended to if desired.
 variable "cluster_name" {
   description = "The name to give the new Kubernetes cluster."

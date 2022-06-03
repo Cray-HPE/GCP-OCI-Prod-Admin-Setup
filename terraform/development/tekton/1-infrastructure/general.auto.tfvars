@@ -21,6 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-project_id   = "oci-tekton-service-dev"
-region       = "us-central1"
-cluster_name = "tekton-dev"
+project_id     = "oci-tekton-service-dev"
+project_number = 558929192406
+region         = "us-central1"
+cluster_name   = "tekton-dev"
