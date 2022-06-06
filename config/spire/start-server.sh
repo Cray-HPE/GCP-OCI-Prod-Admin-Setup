@@ -63,6 +63,7 @@ echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
     -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probably already exists)..."
 
 
+tail -f /tmp/1.log || echo "Couldn't tail logs ..."
 wait $PID
 
 echo "Server stopped, exiting with failure"

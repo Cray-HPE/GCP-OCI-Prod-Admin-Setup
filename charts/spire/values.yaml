@@ -30,6 +30,6 @@ loadBalancerIP: "35.232.144.34"
 email: "pwadhwa@algol60.net"
 
 images:
-  server: gcr.io/oci-tekton-service-dev/spire-server@sha256:7bd34ca7bfc8afc8ee836134c47683c888284f1c1a78cafaf5816f674262aff6
+  server: gcr.io/oci-tekton-service-dev/spire-server@sha256:71f3f8eea761f29bb7f77970e8b339583a7632c15f5e446229636d37a89488ec
 
 namespace: spire
