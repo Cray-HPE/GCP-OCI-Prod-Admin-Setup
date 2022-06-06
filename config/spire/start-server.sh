@@ -50,7 +50,7 @@ echo "Creating registration entry for spire/spire-agent..."
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
     -selector k8s_sat:agent_sa:spire-agent \
-    -socketPath /run/spire/sockets/api.sock || echo "Didn't create entry (don't worry, it probbly already exists)..."
+    -socketPath /run/spire/sockets/api.sock || echo "Didn't create entry (don't worry, it probably already exists)..."
 
 
 echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
@@ -60,7 +60,7 @@ echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
-    -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probbly already exists)..."
+    -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probably already exists)..."
 
 
 wait $PID

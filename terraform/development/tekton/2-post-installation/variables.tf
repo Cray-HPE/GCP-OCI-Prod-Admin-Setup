@@ -18,6 +18,19 @@ variable "cluster_name" {
   default     = "tekton"
 }
 
+variable "cluster_zone" {
+  type    = string
+  default = "us-central1-a"
+}
+
+// External secrets variables
+
+variable "external_secrets_chart_version" {
+  description = "Version of External-Secrets Helm chart. Versions listed here https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets"
+  type        = string
+  default     = "0.4.4"
+}
+
 variable "github_repo" {
   description = "Github repo for running Github Actions from."
   type        = string
