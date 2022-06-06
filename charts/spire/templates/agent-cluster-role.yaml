@@ -41,7 +41,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: spire-agent
-  namespace: {{.Values.namespace }}
+  namespace: spire
 roleRef:
   kind: ClusterRole
   name: spire-agent-cluster-role

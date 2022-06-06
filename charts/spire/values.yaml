@@ -31,5 +31,3 @@ email: "pwadhwa@algol60.net"
 
 images:
   server: gcr.io/oci-tekton-service-dev/spire-server@sha256:71f3f8eea761f29bb7f77970e8b339583a7632c15f5e446229636d37a89488ec
-
-namespace: spire
