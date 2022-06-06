@@ -19,9 +19,16 @@ variable "cluster_name" {
 }
 
 variable "cluster_zone" {
-  description = "The cluster zone."
+  type    = string
+  default = "us-central1-a"
+}
+
+// External secrets variables
+
+variable "external_secrets_chart_version" {
+  description = "Version of External-Secrets Helm chart. Versions listed here https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets"
   type        = string
-  default     = "us-central1-a"
+  default     = "0.4.4"
 }
 
 variable "github_repo" {
@@ -111,4 +118,20 @@ variable "PROM_HELM_CHART_VERSION" {
   default     = "15.8.7"
 }
 
+variable "SPIRE_CHART_PATH" {
+  type        = string
+  description = "SPIRE Helm chart repo"
+  default     = "../../../../charts/spire"
+}
+
+variable "SPIRE_HELM_CHART_VERSION" {
+  description = "Version of the SPIRE helm chart"
+  default     = "15.8.7"
+}
+
+variable "SPIRE_NAMESPACE" {
+  default     = "spire"
+  type        = string
+  description = "Namespace to deploy SPIRE"
+}
 
