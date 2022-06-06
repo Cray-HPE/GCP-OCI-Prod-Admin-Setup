@@ -4,7 +4,7 @@ data "google_client_config" "current" {
 data "google_container_cluster" "tekton_dev" {
   name     = var.cluster_name
   project  = var.project_id
-  location = var.region
+  location = var.cluster_zone
 }
 
 provider "kubernetes" {

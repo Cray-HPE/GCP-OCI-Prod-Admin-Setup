@@ -39,34 +39,27 @@ resource "helm_release" "tekton_chains" {
   force_update     = true
   recreate_pods    = true
   cleanup_on_fail  = true
-  set {
-    name  = "tenantconfig.artifacts\\.oci\\.format"
-    value = "simplesigning"
-  }
-  set {
-    name  = "tenantconfig.artifacts\\.oci\\.storage"
-    value = "oci"
-  }
-  set {
-    name  = "tenantconfig.artifacts\\.taskrun\\.format"
-    value = "in-toto"
-  }
-  set {
-    name  = "tenantconfig.signers\\.x509\\.fulcio\\.address" # Connect chains to fulcio service
-    value = var.FULCIO_ADDRESS
-  }
-  set {
-    name  = "tenantconfig.signers\\.x509\\.fulcio\\.enabled"
-    value = "true"
-  }
-  set {
-    name  = "tenantconfig.transparency\\.enabled"
-    value = "true"
-  }
-  set {
-    name  = "tenantconfig.transparency\\.url" # Connect chains to rekor service
-    value = var.REKOR_ADDRESS
-  }
+
+  values = [
+    <<EOF
+    tenantConfig:
+        artifacts.taskrun.format: in-toto
+        artifacts.taskrun.storage: oci
+
+        artifacts.oci.format: simplesigning
+        artifacts.oci.storage: oci
+
+        transparency.enabled: true
+        transparency.url: ${var.REKOR_ADDRESS}
+
+        signers.x509.fulcio.enabled: true
+        signers.x509.fulcio.issuer: https://sig-spire.algol60.net
+        signers.x509.fulcio.provider: spiffe
+        signers.x509.fulcio.address: ${var.FULCIO_ADDRESS}
+    spire:
+        enabled: true
+    EOF
+  ]
 }
 
 resource "kubernetes_secret" "ctlog-public-key" {
