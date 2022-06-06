@@ -29,6 +29,7 @@ resource "google_project_iam_member" "service-account" {
     "roles/monitoring.metricWriter",
     "roles/monitoring.viewer",
     "roles/stackdriver.resourceMetadata.writer",
+    "roles/cloudkms.admin"
   ])
   project = var.project_id
   role    = each.key
