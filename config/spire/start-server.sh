@@ -1,3 +1,6 @@
+#!/bin/sh
+
+
 #
 # MIT License
 #
@@ -21,46 +24,47 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-#/bin/bash
+
 
 set -e
 
-bb=$(tput bold)
-nn=$(tput sgr0)
+DOMAIN="sig-spire.algol60.net"
 
-DOMAIN=sig-spire.algol60.net
+echo "Running SPIRE server with domain $DOMAIN ..."
 
-echo "${bb}Creating registration entry for the node...${nn}"
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
+/opt/spire/bin/spire-server run -config /run/spire/config/server.conf 1>>/tmp/1.log 2>&1 &
+PID=$!
+
+echo "Server started as process $PID"
+
+echo "Sleeping 30 to give api.sock time to start up..."
+
+sleep 30
+
+
+echo "Creating registration entry for spire/spire-agent..."
+
+/opt/spire/bin/spire-server entry create \
     -node  \
     -spiffeID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
-    -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock 
+    -selector k8s_sat:agent_sa:spire-agent \
+    -socketPath /run/spire/sockets/api.sock || echo "Didn't create entry (don't worry, it probably already exists)..."
 
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://$DOMAIN/ns/default/sa/default \
-    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
-    -selector k8s:ns:default \
-    -selector k8s:sa:default -socketPath /run/spire/sockets/api.sock 
 
-# Test executable for making sure Spiffe is up and running and
-# connecting to Fulcio
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://$DOMAIN/ns/spire-test/sa/spire \
-    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
-    -socketPath /run/spire/sockets/api.sock \
-    -selector k8s:ns:spire-test \
-    -selector k8s:sa:spire
+echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
 
-# Chains connections to Fulcio
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
+/opt/spire/bin/spire-server entry create \
     -spiffeID spiffe://$DOMAIN/ns/tekton-chains/sa/tekton-chains-controller \
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
-    -selector k8s:sa:tekton-chains-controller
+    -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probably already exists)..."
+
+
+tail -f /tmp/1.log || echo "Couldn't tail logs ..."
+wait $PID
+
+echo "Server stopped, exiting with failure"
+exit 1

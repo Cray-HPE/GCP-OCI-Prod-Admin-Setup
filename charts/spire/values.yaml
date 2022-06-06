@@ -22,8 +22,12 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 # Details about the SPIRE domain
-trustDomain: "oidc2.priya-chainguard.dev"
-fullyQualifiedTrustDomain: "https://oidc2.priya-chainguard.dev"
+trustDomain: "sig-spire.algol60.net"
+fullyQualifiedTrustDomain: "https://sig-spire.algol60.net"
+loadBalancerIP: "35.232.144.34"
 
-# Email for the LetsEncrypt cert
-email: "priya@chainguard.dev"
+# Email for the LetsEncrypt cert issued
+email: "pwadhwa@algol60.net"
+
+images:
+  server: gcr.io/oci-tekton-service-dev/spire-server@sha256:71f3f8eea761f29bb7f77970e8b339583a7632c15f5e446229636d37a89488ec
