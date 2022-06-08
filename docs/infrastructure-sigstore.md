@@ -28,6 +28,10 @@ For details on accessing the cluster, see [Connecting to the GKE cluster](#conne
 There is one Cloud SQL MySQL database set up. 
 This database holds all entries for the Rekor transparency log and the Certificate Transparency log.
 
+**Cloud Memorystore Redis** -- [link](https://console.cloud.google.com/memorystore/redis/instances?referrer=search&project=oci-signer-service-dev)
+
+Rekor uses a Redis instance to index entries and improve search through the log.
+
 **GCP Secret Manager** -- [link](https://console.cloud.google.com/security/secret-manager?referrer=search&project=oci-signer-service-dev)
 
 The GCP secret manager contains secrets required for setting up Sigstore including:
