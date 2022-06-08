@@ -82,6 +82,8 @@ module "mysql" {
 
   network = module.network.network_self_link
 
+  database_version = var.database_version
+
   depends_on = [
     module.network,
     module.cluster

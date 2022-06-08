@@ -104,3 +104,11 @@ variable "attestation_bucket" {
   description = "Name of the GCS bucket to store Rekor attestations in"
   default     = "rekor-oci-signer-service"
 }
+
+// MySQL Database
+variable "database_version" {
+  type        = string
+  description = "MySQL database version."
+  default     = "MYSQL_8_0"
+}
+
