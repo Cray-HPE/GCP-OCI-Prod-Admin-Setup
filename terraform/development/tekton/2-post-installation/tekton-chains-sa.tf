@@ -19,6 +19,7 @@ resource "kubernetes_annotations" "tekton_chains" {
 }
 
 resource "null_resource" "image_pull" {
+
   provisioner "local-exec" {
     command = "kubectl patch serviceaccount ${var.tekton_chains_sa_name} -p '{\"imagePullSecrets\": [{\"name\": \"registry-credentials\"}]}' -n ${var.tekton_chains_namespace}"
   }
