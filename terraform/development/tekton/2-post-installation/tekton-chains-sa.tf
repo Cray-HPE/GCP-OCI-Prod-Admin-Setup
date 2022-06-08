@@ -9,7 +9,7 @@ resource "kubernetes_annotations" "tekton_chains" {
   api_version = "v1"
   kind        = "ServiceAccount"
   metadata {
-    name = var.tekton_chains_sa_name
+    name      = var.tekton_chains_sa_name
     namespace = var.tekton_chains_namespace
   }
 
