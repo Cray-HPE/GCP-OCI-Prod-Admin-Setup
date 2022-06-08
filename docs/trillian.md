@@ -13,7 +13,7 @@ The Trilian Helm chart is deployed via Terraform in [sigstore.tf](../terraform/d
 
 The Helm chart is publicly available at https://github.com/sigstore/helm-charts/tree/main/charts/trillian.
 
-To update the CT Log Helm Chart:
+To update the Helm Chart:
 1. Change the desired version in `helm_release.trillian` in [sigstore.tf](../terraform/development/signer/3-sigstore-helm/sigstore.tf)
 1. Update any values in `helm_release.trillian` in [sigstore.tf](../terraform/development/signer/3-sigstore-helm/sigstore.tf)
 1. Merge these changes into `main`
