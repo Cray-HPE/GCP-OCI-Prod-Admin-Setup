@@ -126,7 +126,7 @@ variable "SPIRE_CHART_PATH" {
 
 variable "SPIRE_HELM_CHART_VERSION" {
   description = "Version of the SPIRE helm chart"
-  default     = "15.8.7"
+  default     = "0.0.1"
 }
 
 variable "SPIRE_NAMESPACE" {
