@@ -5,14 +5,30 @@ SPIRE OIDC is currently set up at the `https://sig-spire.algol60.net` domain.
 
 ## Custom SPIRE Setup
 The majority of the SPIRE helm chart manifests were templatized from the [SPIRE Vault OIDC Tutorial](https://spiffe.io/docs/latest/keyless/vault/readme/), with the [k8s manifests here](https://github.com/spiffe/spire-tutorials/tree/main/k8s/oidc-vault).
-There is one significant change -- instead of using the provided `gcr.io/spiffe-io/spire-server` SPIRE server image, HPE SPIRE uses a custom `spire-server` image.
+There are two distinctions that must be called out:
+1. Instead of using the provided `gcr.io/spiffe-io/spire-server` SPIRE server image, HPE SPIRE uses a custom `spire-server` image.
+1. A secret called `registry-credentials` in the `spire` namespace was manually created to give the k8s cluster pull access to the custom `spire-server` image
 
-This is because the SPIRE tutorial expects that SPIRE setup happens on a public cluster.
+
+### Custom SPIRE Server Image
+
+HPE uses a custom SPIRE image because the SPIRE tutorial expects that SPIRE setup happens on a public cluster.
 On a pubilc cluster, registering new entries with the SPIRE server can be done via `kubectl exec`.
 Unfortunately, this is not possible on a private cluster with k8s version < v1.24, which is what HPE is running (1.24 is not yet supported by GKE.)
 
 To get around this, we build a custom spire-server image which runs a custom bash script.
 This custom bash script starts the SPIRE server **and** registers entries, and can be found at [start-server.sh](../config/spire/start-server.sh).
+
+### SPIRE K8s Secret
+There is a secret called `registry-credentials` in the `spire` namespace which is used as an `imagePullSecret` in [server-account.yaml](../charts/spire/templates/server-account.yaml). This is used to pull the custom SPIRE server image described above into the cluster. The contents of this Secret are stored in GCP Secret Manager under [spire-dockerconfig](https://console.cloud.google.com/security/secret-manager/secret/spire-dockerconfig/versions?project=oci-tekton-service-dev).
+
+Should this secret need to be recreated, follow these steps:
+1. Get the contents of the [spire-dockerconfig](https://console.cloud.google.com/security/secret-manager/secret/spire-dockerconfig/versions?project=oci-tekton-service-dev) in Secret Manager
+1. Create a k8s secret by running:
+
+```
+kubectl create secret docker-registry registry-credentials -n spire --from-literal=.dockerconfigjson=[contents of spire-dockerconfig ]
+```
 
 ### Register a new Entry with the SPIRE Server
 Currently, only Pods running in the `tekton-chains` namespace under the `tekton-chains-controller` service account can request an SVID from SPIRE, as that is the only entry registered in [start-server.sh](../config/spire/start-server.sh).
