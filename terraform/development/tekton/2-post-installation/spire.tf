@@ -22,36 +22,6 @@ YAML
   ]
 }
 
-# TODO: Fix (priyawadhwa@)
-# resource "kubectl_manifest" "spire_external_secret" {
-#   yaml_body = <<YAML
-# apiVersion: external-secrets.io/v1alpha1
-# kind: ExternalSecret
-# metadata:
-#   name: spire-dockerconfig
-#   namespace: spire
-# spec:
-#   secretStoreRef:
-#     kind: ClusterSecretStore
-#     name: gcp-backend
-#   target:
-#     name: spire-image-pull-secret-creds
-#     template:
-#       type: kubernetes.io/dockerconfigjson
-#       data:
-#         .dockerconfigjson: "{{ .spire-dockerconfig | toString }}"
-#   data:
-#   - secretKey: spire-dockerconfig
-#     remoteRef:
-#       key: spire-dockerconfig
-# YAML
-
-#   depends_on = [
-#     kubectl_manifest.spire_namespace
-#   ]
-# }
-
-
 resource "helm_release" "spire" {
   name             = "spire"
   chart            = var.SPIRE_CHART_PATH

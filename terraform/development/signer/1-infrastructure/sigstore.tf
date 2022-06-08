@@ -96,7 +96,7 @@ module "fulcio" {
   project_id   = var.project_id
   cluster_name = var.cluster_name
 
-  # TODO (priyawadhwa): Disable this once we have the intermediate cert
+  # TODO: Disable this once we have the intermediate cert
   enable_ca    = true
   ca_pool_name = "sigstore-ca"
 

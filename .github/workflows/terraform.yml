@@ -48,7 +48,6 @@ jobs:
 
       - uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec # v1.3.2
         with:
-          # TODO: extract terraform from the tf file when we have pinned
           terraform_version: 1.1.6
 
       - name: Terraform fmt
