@@ -8,7 +8,8 @@ This key is generated in terraform in the Rekor submodule of [sigstore.tf](../te
 There is also a GCP Redis instance which Rekor stores data in to make it easier to index.
 
 ## Setting up Rekor
-Rekor is set up via a Helm Chart and deployed with Terraform in [sigstore.tf](../terraform/development/signer/3-sigstore-helm/sigstore.tf).
+Rekor infrastructure (including KMS, Redis and service accounts) is deployed in [1-infrastructure/sigstore.tf](../terraform/development/signer/1-infrastructure/sigstore.tf) as part of the Rekor module.
+The Rekor application is deployed via a Helm Chart and deployed with Terraform in [3-sigstore-helm/sigstore.tf](../terraform/development/signer/3-sigstore-helm/sigstore.tf).
 
 ## Updating Rekor
 The Rekor Helm chart is deployed via Terraform in [sigstore.tf](../terraform/development/signer/3-sigstore-helm/sigstore.tf).
@@ -31,6 +32,7 @@ This doc walks through basic steps to debug Rekor.
 
 
 ## Steps to Investigate
+**Connect to the cluster by following instructions in [Connecting to GKE Cluster](./infrastructure-sigstore.md#connecting-to-the-gke-cluster).**
 
 ### Rekor Services Aren't Running
 
