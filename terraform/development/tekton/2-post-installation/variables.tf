@@ -96,7 +96,7 @@ variable "TK_CHAINS_NAMESPACE" {
 }
 
 variable "TK_CHAINS_HELM_CHART_VERSION" {
-  default     = "0.2.4"
+  default     = "0.2.6"
   type        = string
   description = "Helm chart version of tekton chains to deploy"
 }
