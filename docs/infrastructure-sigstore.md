@@ -16,8 +16,7 @@ It requires the following services:
 
 There is currently one private zonal cluster set up in the `us-central1-a` region in which Sigstore services all run.
 
-<!-- TODO: Add in monitoring.md (priyawadhwa@) -->
-Additionally, a prober runs in the cluster (more details in monitoring.md).
+Additionally, a prober runs in the cluster (more details in [monitoring-sigstore.md](./monitoring-sigstore.md)).
 
 **Google Compute Engine** -- [link](https://console.cloud.google.com/compute/instances?referrer=search&project=oci-signer-service-dev)
 
