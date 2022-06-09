@@ -99,8 +99,13 @@ resource "kubernetes_service_account" "tekton" {
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.tekton_gsa.email
     }
+
+  }
+  image_pull_secret {
+    name = "registry-credentials"
   }
 }
+
 
 # Services account for GKE workloads, fulcio etc.
 resource "google_service_account" "tekton_gsa" {
@@ -131,3 +136,5 @@ resource "google_project_iam_member" "token_creation" {
   member     = "serviceAccount:${google_service_account.tekton_gsa.email}"
   depends_on = [google_service_account.tekton_gsa]
 }
+
+
