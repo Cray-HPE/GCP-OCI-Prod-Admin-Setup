@@ -1,3 +1,6 @@
+#!/bin/sh
+
+
 #
 # MIT License
 #
@@ -21,38 +24,55 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-#/bin/bash
+
 
 set -e
 
-bb=$(tput bold)
-nn=$(tput sgr0)
+DOMAIN="sig-spire.algol60.net"
 
-DOMAIN=sig-spire.algol60.net
+echo "Running SPIRE server with domain $DOMAIN ..."
 
-echo "${bb}Creating registration entry for the node...${nn}"
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
+/opt/spire/bin/spire-server run -config /run/spire/config/server.conf 1>>/tmp/1.log 2>&1 &
+PID=$!
+
+echo "Server started as process $PID"
+
+echo "Sleeping 30 to give api.sock time to start up..."
+
+sleep 30
+
+
+echo "Creating registration entry for spire/spire-agent..."
+
+/opt/spire/bin/spire-server entry create \
     -node  \
     -spiffeID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -selector k8s_sat:cluster:demo-cluster \
     -selector k8s_sat:agent_ns:spire \
-    -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock 
+    -selector k8s_sat:agent_sa:spire-agent \
+    -socketPath /run/spire/sockets/api.sock || echo "Didn't create entry (don't worry, it probably already exists)..."
 
-echo "Creating entry for tekton-chains-controller service account in tekton-chains ns"
-kubectl exec -n spire spire-server-0 -- \
+
+echo "Creating registration entry for tekton-chains/tekton-chains-controller..."
+
 /opt/spire/bin/spire-server entry create \
     -spiffeID spiffe://$DOMAIN/ns/tekton-chains/sa/tekton-chains-controller \
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
-    -selector k8s:sa:tekton-chains-controller
+    -selector k8s:sa:tekton-chains-controller || echo "Didn't create entry (don't worry, it probably already exists)..."
 
-
+echo "Creating registration entry for default/tekton-sa..."
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
     -spiffeID spiffe://$DOMAIN/ns/default/sa/tekton-sa \
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:default \
-    -selector k8s:sa:tekton-sa
+    -selector k8s:sa:tekton-sa || echo "Didn't create entry (don't worry, it probably already exists)..."
+
+tail -f /tmp/1.log || echo "Couldn't tail logs ..."
+wait $PID
+
+echo "Server stopped, exiting with failure"
+exit 1
