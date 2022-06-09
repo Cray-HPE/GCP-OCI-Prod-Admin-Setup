@@ -1,8 +1,6 @@
-// TODO: Pin source to commits or releases
-
 // Private network
 module "network" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region     = var.region
   project_id = var.project_id
@@ -12,7 +10,7 @@ module "network" {
 
 // Bastion
 module "bastion" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   project_id         = var.project_id
   region             = var.region
@@ -58,7 +56,7 @@ module "cluster" {
 
 // Cluster policies setup.
 module "policy_bindings" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/policy_bindings"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/policy_bindings?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region     = var.region
   project_id = var.project_id
@@ -73,7 +71,7 @@ module "policy_bindings" {
 
 // MYSQL is used as the database for Trillian to store entries in
 module "mysql" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/mysql"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/mysql?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region     = var.region
   project_id = var.project_id
@@ -92,7 +90,7 @@ module "mysql" {
 
 // Fulcio
 module "fulcio" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/fulcio"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/fulcio?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region       = var.region
   project_id   = var.project_id
@@ -114,7 +112,7 @@ module "fulcio" {
 
 // Rekor
 module "rekor" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/rekor"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/rekor?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region       = var.region
   project_id   = var.project_id

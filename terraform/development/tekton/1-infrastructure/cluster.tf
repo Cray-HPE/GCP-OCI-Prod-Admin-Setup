@@ -33,7 +33,7 @@ data "google_project" "project" {
 
 // Private network
 module "network" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/network?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region       = var.region
   project_id   = var.project_id
@@ -42,7 +42,7 @@ module "network" {
 
 // Bastion
 module "bastion" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/bastion?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   project_id         = var.project_id
   region             = var.region
@@ -116,7 +116,7 @@ resource "google_compute_firewall" "master-webhooks" {
 
 // Cluster policies setup.
 module "policy_bindings" {
-  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/policy_bindings"
+  source = "git::https://github.com/sigstore/scaffolding.git//terraform/gcp/modules/policy_bindings?ref=b5aaa001b1705c9d8c954773ca64dbf35dc6b807"
 
   region     = var.region
   project_id = var.project_id
