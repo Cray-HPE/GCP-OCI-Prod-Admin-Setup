@@ -139,14 +139,14 @@ jobs:
       timeout-minutes: 2
       run: |
         pushd ${{ env.TF_DIR }}
-        terraform plan
+        terraform plan -out=plan.out
         popd
 
     - name: terraform apply
       if: ${{ env.TF_MODE == 'apply' }}
       run: |
         pushd ${{ env.TF_DIR }}
-        terraform apply -auto-approve
+        terraform apply "plan.out" -auto-approve
         popd
 
     - name: terraform output
