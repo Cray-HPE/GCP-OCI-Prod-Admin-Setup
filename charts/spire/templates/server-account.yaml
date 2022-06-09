@@ -27,5 +27,3 @@ kind: ServiceAccount
 metadata:
   name: spire-server
   namespace: spire
-imagePullSecrets:
-- name: registry-credentials
