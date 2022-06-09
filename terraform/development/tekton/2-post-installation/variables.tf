@@ -28,13 +28,23 @@ variable "cluster_zone" {
 variable "external_secrets_chart_version" {
   description = "Version of External-Secrets Helm chart. Versions listed here https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets"
   type        = string
-  default     = "0.4.4"
+  default     = "0.5.5"
 }
 
 variable "github_repo" {
   description = "Github repo for running Github Actions from."
   type        = string
   default     = "Cray-HPE/GCP-OCI-Prod-Admin-Setup"
+}
+
+variable "tekton_chains_sa_name" {
+  default     = "tekton-chains-controller"
+  description = "Name of the service accounts in GCP/GKE and k8s"
+}
+
+variable "tekton_chains_namespace" {
+  default     = "tekton-chains"
+  description = "Namespace of the tekton chains controller"
 }
 
 variable "tekton_sa_name" {
