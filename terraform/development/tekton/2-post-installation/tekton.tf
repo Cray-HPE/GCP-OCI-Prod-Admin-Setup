@@ -130,11 +130,11 @@ resource "google_project_iam_member" "storage_admin_member" {
   depends_on = [google_service_account.tekton_gsa]
 }
 
-resource "google_project_iam_member" "token_creation" {
+/*resource "google_project_iam_member" "token_creation" {
   project    = var.project_id
   role       = "roles/iam.serviceAccountTokenCreator"
   member     = "serviceAccount:${google_service_account.tekton_gsa.email}"
   depends_on = [google_service_account.tekton_gsa]
-}
+}*/
 
 
