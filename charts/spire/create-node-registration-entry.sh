@@ -39,28 +39,20 @@ kubectl exec -n spire spire-server-0 -- \
     -selector k8s_sat:agent_ns:spire \
     -selector k8s_sat:agent_sa:spire-agent -socketPath /run/spire/sockets/api.sock 
 
+echo "Creating entry for tekton-chains-controller service account in tekton-chains ns"
 kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://$DOMAIN/ns/default/sa/default \
-    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
-    -selector k8s:ns:default \
-    -selector k8s:sa:default -socketPath /run/spire/sockets/api.sock 
-
-# Test executable for making sure Spiffe is up and running and
-# connecting to Fulcio
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
-    -spiffeID spiffe://$DOMAIN/ns/spire-test/sa/spire \
-    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
-    -socketPath /run/spire/sockets/api.sock \
-    -selector k8s:ns:spire-test \
-    -selector k8s:sa:spire
-
-# Chains connections to Fulcio
-kubectl exec -n spire spire-server-0 -- \
-    /opt/spire/bin/spire-server entry create \
+/opt/spire/bin/spire-server entry create \
     -spiffeID spiffe://$DOMAIN/ns/tekton-chains/sa/tekton-chains-controller \
     -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
     -socketPath /run/spire/sockets/api.sock \
     -selector k8s:ns:tekton-chains \
     -selector k8s:sa:tekton-chains-controller
+
+echo "Creating entry for tekton-sa service account in default ns"
+kubectl exec -n spire spire-server-0 -- \
+/opt/spire/bin/spire-server entry create \
+    -spiffeID spiffe://$DOMAIN/ns/default/sa/tekton-sa \
+    -parentID spiffe://$DOMAIN/ns/spire/sa/spire-agent \
+    -socketPath /run/spire/sockets/api.sock \
+    -selector k8s:ns:default\
+    -selector k8s:sa:tekton-sa
