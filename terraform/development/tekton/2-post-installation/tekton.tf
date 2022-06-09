@@ -130,6 +130,7 @@ resource "google_project_iam_member" "storage_admin_member" {
   depends_on = [google_service_account.tekton_gsa]
 }
 
+# Spire is doing the OIDC, uncomment if testing with k8s
 /*resource "google_project_iam_member" "token_creation" {
   project    = var.project_id
   role       = "roles/iam.serviceAccountTokenCreator"
