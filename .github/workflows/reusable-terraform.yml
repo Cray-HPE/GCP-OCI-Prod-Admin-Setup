@@ -153,6 +153,14 @@ jobs:
       id: tf-output
       if: ${{ env.OUTPUT_BASTION_INFO == 'true' }}
       run: |
+        if [[ ! -z "${{ env.BASTION_NAME}}" ]]; then
+          echo "::set-output name=bastion_name::${{ env.BASTION_NAME}}"
+          if [[ ! -z "${{ env.BASTION_ZONE}}" ]]; then
+            echo "::set-output name=bastion_zone::${{ env.BASTION_ZONE}}"
+            exit 0
+          fi
+        fi
+
         pushd ${{ env.TF_INFRA_DIR }}
         terraform init
         echo "::set-output name=bastion_name::$(terraform output -raw bastion_name)"
